@@ -1,3 +1,4 @@
+// tomer
 import { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -14,9 +15,9 @@ import Scrollbar from 'src/components/scrollbar';
 import { NavSectionVertical } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
-import NavUpgrade from '../common/nav-upgrade';
+// import NavUpgrade from '../common/nav-upgrade';
 import { useNavData } from './config-navigation';
-import NavToggleButton from '../common/nav-toggle-button';
+// import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <NavUpgrade />
+      {/* <NavUpgrade /> */}
     </Scrollbar>
   );
 
@@ -74,7 +75,7 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
         width: { lg: NAV.W_VERTICAL },
       }}
     >
-      <NavToggleButton />
+      {/* <NavToggleButton /> */}
 
       {lgUp ? (
         <Stack
