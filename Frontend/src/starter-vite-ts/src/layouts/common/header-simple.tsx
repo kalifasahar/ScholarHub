@@ -1,3 +1,4 @@
+// tomer
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import AppBar from '@mui/material/AppBar';
@@ -12,7 +13,7 @@ import Logo from 'src/components/logo';
 
 import { HEADER } from '../config-layout';
 import HeaderShadow from './header-shadow';
-import SettingsButton from './settings-button';
+// import SettingsButton from './settings-button';
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ export default function HeaderSimple() {
         <Logo />
 
         <Stack direction="row" alignItems="center" spacing={1}>
-          <SettingsButton />
+          {/* <SettingsButton /> */}
 
           <Link color="inherit" sx={{ typography: 'subtitle2' }}>
             Need help?

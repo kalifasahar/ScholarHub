@@ -25,14 +25,7 @@ const OPTIONS = [
     label: 'Home',
     linkTo: '/',
   },
-  {
-    label: 'Profile',
-    linkTo: '/#1',
-  },
-  {
-    label: 'Settings',
-    linkTo: '/#2',
-  },
+  
 ];
 
 // ----------------------------------------------------------------------
@@ -80,8 +73,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={user?.photoURL}
-          alt={user?.displayName}
+          src={user?.displayName}
           sx={{
             width: 36,
             height: 36,
