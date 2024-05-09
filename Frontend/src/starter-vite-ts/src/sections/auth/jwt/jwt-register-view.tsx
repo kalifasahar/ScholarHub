@@ -65,8 +65,11 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // TODO add the logic (need to intgrate with BE for the logic)
+      // user's registration data is submitted to the authentication service
       await register?.(data.email, data.password, data.firstName, data.lastName);
-
+      
+      // If failed return to 'Log-in' page, if success route to dashboard
       router.push(returnTo || PATH_AFTER_LOGIN);
     } catch (error) {
       console.error(error);
@@ -77,7 +80,7 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Get started absolutely free</Typography>
+      <Typography variant="h4">Join BGU scholarship platform</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2"> Already have an account? </Typography>
@@ -87,28 +90,6 @@ export default function JwtRegisterView() {
         </Link>
       </Stack>
     </Stack>
-  );
-
-  const renderTerms = (
-    <Typography
-      component="div"
-      sx={{
-        mt: 2.5,
-        textAlign: 'center',
-        typography: 'caption',
-        color: 'text.secondary',
-      }}
-    >
-      {'By signing up, I agree to '}
-      <Link underline="always" color="text.primary">
-        Terms of Service
-      </Link>
-      {' and '}
-      <Link underline="always" color="text.primary">
-        Privacy Policy
-      </Link>
-      .
-    </Typography>
   );
 
   const renderForm = (
@@ -162,7 +143,6 @@ export default function JwtRegisterView() {
         {renderForm}
       </FormProvider>
 
-      {renderTerms}
     </>
   );
 }

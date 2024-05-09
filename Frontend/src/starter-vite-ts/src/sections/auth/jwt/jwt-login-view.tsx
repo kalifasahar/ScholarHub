@@ -1,3 +1,5 @@
+// Sahar
+
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -27,15 +29,10 @@ import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 export default function JwtLoginView() {
   const { login } = useAuthContext();
-
   const router = useRouter();
-
   const [errorMsg, setErrorMsg] = useState('');
-
   const searchParams = useSearchParams();
-
   const returnTo = searchParams.get('returnTo');
-
   const password = useBoolean();
 
   const LoginSchema = Yup.object().shape({
@@ -44,8 +41,8 @@ export default function JwtLoginView() {
   });
 
   const defaultValues = {
-    email: 'demo@minimals.cc',
-    password: 'demo1234',
+    email: 'admin@bgu.ac.il',
+    password: 'admin',
   };
 
   const methods = useForm({
@@ -61,6 +58,10 @@ export default function JwtLoginView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      // Verfiy the password and username with the 'Backedn' moudle.
+      // TODO: need to remove the data.email & data.password so it will integrate with BE
+      data.email = "demo@minimals.cc"
+      data.password = "demo1234"
       await login?.(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);
@@ -73,7 +74,7 @@ export default function JwtLoginView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5 }}>
-      <Typography variant="h4">Sign in to Minimal</Typography>
+      <Typography variant="h4">Sign in to ScholarHub</Typography>
 
       <Stack direction="row" spacing={0.5}>
         <Typography variant="body2">New user?</Typography>
@@ -104,6 +105,7 @@ export default function JwtLoginView() {
         }}
       />
 
+      {/* TODO: need to handle forget password */}
       <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
         Forgot password?
       </Link>
@@ -125,9 +127,9 @@ export default function JwtLoginView() {
     <>
       {renderHead}
 
-      <Alert severity="info" sx={{ mb: 3 }}>
+      {/* <Alert severity="info" sx={{ mb: 3 }}>
         Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
-      </Alert>
+      </Alert> */}
 
       {!!errorMsg && (
         <Alert severity="error" sx={{ mb: 3 }}>
