@@ -1,3 +1,4 @@
+// tomer
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import { memo, useState, useCallback } from 'react';
@@ -112,7 +113,6 @@ function Searchbar() {
         <Iconify icon="eva:search-fill" />
       </IconButton>
 
-      {lgUp && <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>⌘K</Label>}
     </Stack>
   );
 
