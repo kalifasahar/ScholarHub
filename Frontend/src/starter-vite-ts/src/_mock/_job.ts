@@ -1,4 +1,3 @@
-import { countries } from 'src/assets/data';
 
 import { _mock } from './_mock';
 
@@ -148,15 +147,12 @@ export const _jobs = [...Array(12)].map((_, index) => {
     fullAddress: _mock.fullAddress(index),
   };
 
-  const locations = countries.slice(1, index + 2).map((option) => option.label);
-
   return {
     id: _mock.id(index),
     salary,
     publish,
     company,
     benefits,
-    locations,
     experience,
     employmentTypes,
     content: CONTENT,

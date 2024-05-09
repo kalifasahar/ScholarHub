@@ -1,4 +1,3 @@
-import { countries } from 'src/assets/data';
 
 import { _mock } from './_mock';
 import { _tags } from './assets';
@@ -108,8 +107,6 @@ export const _tours = [...Array(12)].map((_, index) => {
 
   const publish = index % 3 ? 'published' : 'draft';
 
-  const destination = countries.map((option) => option.label)[index];
-
   const services = (index % 2 && ['Audio guide', 'Food and drinks']) ||
     (index % 3 && ['Lunch', 'Private tour']) ||
     (index % 4 && ['Special activities', 'Entrance fees']) || [
@@ -135,7 +132,6 @@ export const _tours = [...Array(12)].map((_, index) => {
     services,
     available,
     tourGuides,
-    destination,
     bookers: BOOKER,
     content: CONTENT,
     tags: _tags.slice(0, 5),
