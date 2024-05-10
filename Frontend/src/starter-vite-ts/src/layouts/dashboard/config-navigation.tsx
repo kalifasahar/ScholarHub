@@ -1,3 +1,4 @@
+// tomer
 import { useMemo } from 'react';
 
 import { paths } from 'src/routes/paths';
@@ -51,7 +52,7 @@ export function useNavData() {
       {
         subheader: 'overview v5.7.0',
         items: [
-          { title: 'one', path: paths.dashboard.root, icon: ICONS.dashboard },
+          { title: 'Scholarship', path: paths.dashboard.root, icon: ICONS.dashboard },
           { title: 'two', path: paths.dashboard.two, icon: ICONS.ecommerce },
           {
             title: 'three',
