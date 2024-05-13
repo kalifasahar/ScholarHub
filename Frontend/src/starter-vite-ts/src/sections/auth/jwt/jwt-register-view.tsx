@@ -1,3 +1,5 @@
+// Sahar - register page
+
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -39,10 +41,10 @@ export default function JwtRegisterView() {
   const password = useBoolean();
 
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name required'),
-    lastName: Yup.string().required('Last name required'),
-    email: Yup.string().required('Email is required').email('Email must be a valid email address'),
-    password: Yup.string().required('Password is required'),
+    firstName: Yup.string().required('נדרש למלא שם פרטי'),
+    lastName: Yup.string().required('נדרש למלא שם משפחה'),
+    email: Yup.string().required('נדרש למלא דואר אלקטרוני').email('כתובת הדואר האלקטרונית חייבת להיות תקינה'),
+    password: Yup.string().required('נדרש למלא סיסמא'),
   });
 
   const defaultValues = {
@@ -80,13 +82,13 @@ export default function JwtRegisterView() {
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 5, position: 'relative' }}>
-      <Typography variant="h4">Join BGU scholarship platform</Typography>
+      <Typography variant="h4">רישום למערכת</Typography>
 
       <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2"> Already have an account? </Typography>
+        <Typography variant="body2">קיים ברשותך משתמש?</Typography>
 
         <Link href={paths.auth.jwt.login} component={RouterLink} variant="subtitle2">
-          Sign in
+          התחבר כעת
         </Link>
       </Stack>
     </Stack>
@@ -95,15 +97,15 @@ export default function JwtRegisterView() {
   const renderForm = (
     <Stack spacing={2.5}>
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-        <RHFTextField name="firstName" label="First name" />
-        <RHFTextField name="lastName" label="Last name" />
+        <RHFTextField name="firstName" label="שם פרטי" />
+        <RHFTextField name="lastName" label="שם משפחה" />
       </Stack>
 
-      <RHFTextField name="email" label="Email address" />
+      <RHFTextField name="email" label="דואר אלקטרוני" />
 
       <RHFTextField
         name="password"
-        label="Password"
+        label="סיסמא"
         type={password.value ? 'text' : 'password'}
         InputProps={{
           endAdornment: (
@@ -124,7 +126,7 @@ export default function JwtRegisterView() {
         variant="contained"
         loading={isSubmitting}
       >
-        Create account
+        צור משתמש
       </LoadingButton>
     </Stack>
   );

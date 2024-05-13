@@ -2,9 +2,10 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { GuestGuard } from 'src/auth/guard';
+import { SplashScreen } from 'src/components/loading-screen';
+
 import AuthClassicLayout from 'src/layouts/auth/classic';
 
-import { SplashScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
