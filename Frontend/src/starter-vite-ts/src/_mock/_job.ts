@@ -73,9 +73,9 @@ export const JOB_PUBLISH_OPTIONS = [
 ];
 
 export const JOB_SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
-  { value: 'popular', label: 'Popular' },
-  { value: 'oldest', label: 'Oldest' },
+  { value: 'עדכני', label: 'עדכני' },
+  // { value: 'popular', label: 'Popular' },
+  { value: 'ישן', label: 'ישן' },
 ];
 
 const CANDIDATES = [...Array(12)].map((_, index) => ({
@@ -150,19 +150,12 @@ export const _jobs = [...Array(12)].map((_, index) => {
   return {
     id: _mock.id(index),
     salary,
-    publish,
     company,
-    benefits,
-    experience,
-    employmentTypes,
     content: CONTENT,
-    candidates: CANDIDATES,
-    role: _mock.role(index),
-    title: _mock.jobTitle(index),
+    title: " הקרן הלאומית למדע (ISF) - מלגות פוסט דוק' במדעי החברה - תשפ",
     createdAt: _mock.time(index),
     expiredDate: _mock.time(index),
     skills: JOB_SKILL_OPTIONS.slice(0, 3),
-    totalViews: _mock.number.nativeL(index),
-    workingSchedule: JOB_WORKING_SCHEDULE_OPTIONS.slice(0, 2),
+    description: 'בלה בלה בלה בלה בלה בלה בלה בלה בלה בלה בלה בלה'
   };
 });

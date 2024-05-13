@@ -10,7 +10,7 @@ export const TOUR_DETAILS_TABS = [
 ];
 
 export const TOUR_SORT_OPTIONS = [
-  { value: 'latest', label: 'Latest' },
+  { value: 'עדכני', label: 'עדכני' },
   { value: 'popular', label: 'Popular' },
   { value: 'oldest', label: 'Oldest' },
 ];
