@@ -60,8 +60,8 @@ export default function JwtLoginView() {
     try {
       // Verfiy the password and username with the 'Backedn' moudle.
       // TODO: need to remove the data.email & data.password so it will integrate with BE
-      data.email = "demo@minimals.cc"
-      data.password = "demo1234"
+      // data.email = "demo@minimals.cc"
+      // data.password = "demo1234"
       await login?.(data.email, data.password);
 
       router.push(returnTo || PATH_AFTER_LOGIN);

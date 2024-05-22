@@ -134,7 +134,10 @@ export function AuthProvider({ children }: Props) {
 
     const res = await axios.post(endpoints.auth.login, data);
 
+    console.log(res)
+
     const { accessToken, user } = res.data;
+    
 
     setSession(accessToken);
 
@@ -152,14 +155,19 @@ export function AuthProvider({ children }: Props) {
   // REGISTER
   const register = useCallback(
     async (email: string, password: string, firstName: string, lastName: string) => {
+      const username = firstName
+      const role = 'student'
       const data = {
         email,
         password,
-        firstName,
-        lastName,
+        username,
+        role
       };
-
+      console.log(endpoints.auth.register)
+      console.log(data)
       const res = await axios.post(endpoints.auth.register, data);
+
+      console.log(res)
 
       const { accessToken, user } = res.data;
 
