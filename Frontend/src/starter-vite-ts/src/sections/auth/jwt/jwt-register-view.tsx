@@ -34,6 +34,8 @@ export default function JwtRegisterView() {
 
   const [errorMsg, setErrorMsg] = useState('');
 
+  const [successMsg, setSuccessMsg] = useState('');
+
   const searchParams = useSearchParams();
 
   const returnTo = searchParams.get('returnTo');
@@ -67,14 +69,22 @@ export default function JwtRegisterView() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      // TODO add the logic (need to intgrate with BE for the logic)
       // user's registration data is submitted to the authentication service
       await register?.(data.email, data.password, data.firstName, data.lastName);
       
-      // If failed return to 'Log-in' page, if success route to dashboard
-      router.push(returnTo || PATH_AFTER_LOGIN);
+      // Set success message
+      setSuccessMsg('הודעת אימות נשלחה בהצלחה לדואר האלקטרוני, אנא לחץ על הקישור על מנת לסיים את תהליך ההרשמה בהצלחה');
+
+      // // If failed return to 'Log-in' page, if success route to dashboard
+      // router.push(returnTo || PATH_AFTER_LOGIN);
+
+      // Redirect to login page after 5 seconds
+      setTimeout(() => {
+        router.push(paths.auth.jwt.login);
+      }, 5000);
     } catch (error) {
       console.error(error);
+      setSuccessMsg(''); // Clear success message if there's an error
       reset();
       setErrorMsg(typeof error === 'string' ? error : error.message);
     }
@@ -134,6 +144,12 @@ export default function JwtRegisterView() {
   return (
     <>
       {renderHead}
+
+      {successMsg && (
+        <Alert severity="success" sx={{ m: 3 }}>
+          {successMsg}
+        </Alert>
+      )}
 
       {!!errorMsg && (
         <Alert severity="error" sx={{ m: 3 }}>
