@@ -12,13 +12,13 @@ import { useRouter } from 'src/routes/hooks';
 import Iconify from 'src/components/iconify';
 import SearchNotFound from 'src/components/search-not-found';
 
-import { IJobItem } from 'src/types/job';
+import { IScholarshipItem } from 'src/types/scholarship';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   query: string;
-  results: IJobItem[];
+  results: IScholarshipItem[];
   onSearch: (inputValue: string) => void;
   hrefItem: (id: string) => string;
 };

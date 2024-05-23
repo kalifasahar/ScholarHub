@@ -1,18 +1,9 @@
-// tomer
 import { useMemo } from 'react';
-
 import { paths } from 'src/routes/paths';
-
 import SvgColor from 'src/components/svg-color';
-
-// ----------------------------------------------------------------------
 
 const icon = (name: string) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-  // OR
-  // <Iconify icon="fluent:mail-24-filled" />
-  // https://icon-sets.iconify.design/solar/
-  // https://www.streamlinehq.com/icons
 );
 
 const ICONS = {
@@ -42,41 +33,27 @@ const ICONS = {
   dashboard: icon('ic_dashboard'),
 };
 
-// ----------------------------------------------------------------------
-
 export function useNavData() {
   const data = useMemo(
     () => [
       // OVERVIEW
-      // ----------------------------------------------------------------------
       {
-        subheader: 'overview v5.7.0',
+        subheader: 'אזור אישי',
         items: [
           { title: 'מלגות', path: paths.dashboard.root, icon: ICONS.dashboard },
-          { title: 'two', path: paths.dashboard.two, icon: ICONS.ecommerce },
-          {
-            title: 'three',
-            path: paths.dashboard.three,
-            icon: ICONS.analytics,
-          },
+          { title: 'המלגות שלי', path: paths.dashboard.two, icon: ICONS.ecommerce },
+          // { title: 'three', path: paths.dashboard.three, icon: ICONS.analytics },
         ],
       },
 
       // MANAGEMENT
-      // ----------------------------------------------------------------------
       {
-        subheader: 'management',
+        subheader: 'ניהול',
         items: [
-          {
-            title: 'user',
-            path: paths.dashboard.group.root,
-            icon: ICONS.user,
-            children: [
-              { title: 'four', path: paths.dashboard.group.root },
-              { title: 'five', path: paths.dashboard.group.five },
-              { title: 'six', path: paths.dashboard.group.six },
-            ],
-          },
+          { title: 'דירוג סטונדטים', path: paths.dashboard.group.root, icon: ICONS.user },
+          // { title: 'four', path: paths.dashboard.group.root, icon: ICONS.user },
+          // { title: 'five', path: paths.dashboard.group.five, icon: ICONS.user },
+          // { title: 'six', path: paths.dashboard.group.six, icon: ICONS.user },
         ],
       },
     ],

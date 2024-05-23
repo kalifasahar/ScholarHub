@@ -1,13 +1,12 @@
-import Box from '@mui/material/Box';
+import { useState } from 'react';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import ListItemText from '@mui/material/ListItemText';
+import { Box, Stack, Typography } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -18,23 +17,81 @@ import { fDate } from 'src/utils/format-time';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { IJobItem } from 'src/types/job';
+import { IScholarshipItem } from 'src/types/scholarship';
 import Button from '@mui/material/Button';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  job: IJobItem;
+  job: IScholarshipItem;
   onView: VoidFunction;
   onEdit: VoidFunction;
   onDelete: VoidFunction;
 };
 
+const CategoryList = ({ categories }: { categories: string[] }) => (
+  <Stack direction="row" spacing={3} sx={{ p: 0 }}>
+    {categories.map((category, index) => (
+      <Stack
+        key={index} 
+        spacing={0.5}
+        flexShrink={0}
+        direction="row"
+        alignItems="center"
+        sx={{ color: 'text.disabled', minWidth: 0, py: 0 }}
+      >
+        <Typography variant="body1" noWrap>
+          {category}
+        </Typography>
+      </Stack>
+    ))}
+  </Stack>
+);
+
+
 export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
   const popover = usePopover();
 
-  const { id, title, createdAt, salary} =
-    job;
+  const { id, title, grant,categories,expiredDate} = job;
+
+  const [openWizard, setOpenWizard] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+
+  const steps = ['Step 1', 'Step 2', 'Step 3'];
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setOpenWizard(false);
+  };
+
+  const handleOpenWizard = () => {
+    setOpenWizard(true);
+  };
+
+  const handleCloseWizard = () => {
+    setOpenWizard(false);
+  };
+
+  const renderWizardContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return <Typography>Content for Step 1</Typography>;
+      case 1:
+        return <Typography>Content for Step 2</Typography>;
+      case 2:
+        return <Typography>Content for Step 3</Typography>;
+      default:
+        return 'Unknown step';
+    }
+  };
 
   return (
     <>
@@ -57,7 +114,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
                         {job.description}
                     </Typography>
                     <Typography component="span" variant="body2" color="textPrimary">
-                        תאריך פרסום: {fDate(createdAt)}
+                        תאריך אחרון להגשה: {fDate(expiredDate)}
                     </Typography>
                 </Stack>
             }
@@ -72,27 +129,24 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
 
     <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
 
-    <Box rowGap={1.5} display="grid" gridTemplateColumns="repeat(2, 1fr)" sx={{ p: 3 }}>
-        {[
-            {
-                label: salary.negotiable ? 'Negotiable' : salary.price.toString().concat('₪')
-                // icon: <Iconify width={16} icon="solar:wad-of-money-bold" sx={{ flexShrink: 0 }} />,
-            },
-        ].map((item) => (
-            <Stack
-                key={item.label}
-                spacing={0.5}
-                flexShrink={0}
-                direction="row"
-                alignItems="center"
-                sx={{ color: 'text.disabled', minWidth: 0 }}
-            >
-                {/* {item.icon} */}
-                <Typography variant="caption" noWrap>
-                    {item.label}
-                </Typography>
-            </Stack>
-        ))}
+    <Box sx={{ p: 2 }}>
+      {[
+        {
+          label: <CategoryList categories={categories} />,
+          // icon: <Iconify width={16} icon="solar:wad-of-money-bold" sx={{ flexShrink: 0 }} />,
+        },
+      ].map((item, index) => (
+        <Stack
+          key={index} // Use the index or another unique value for the key
+          spacing={0.5}
+          flexShrink={0}
+          direction="column"
+          alignItems="flex-start"
+          sx={{ color: 'text.disabled', minWidth: 0 }}
+        >
+          {item.label}
+        </Stack>
+      ))}
     </Box>
     <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
 

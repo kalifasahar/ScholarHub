@@ -6,14 +6,14 @@ import Pagination, { paginationClasses } from '@mui/material/Pagination';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { IJobItem } from 'src/types/job';
+import { IScholarshipItem } from 'src/types/scholarship';
 
-import JobItem from './job-item';
+import JobItem from './scholarship-item';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  jobs: IJobItem[];
+  jobs: IScholarshipItem[];
 };
 
 export default function JobList({ jobs }: Props) {

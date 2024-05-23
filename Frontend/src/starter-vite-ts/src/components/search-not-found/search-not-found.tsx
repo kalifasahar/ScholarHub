@@ -18,13 +18,12 @@ export default function SearchNotFound({ query, sx, ...other }: Props) {
       {...other}
     >
       <Typography variant="h6" gutterBottom>
-        Not Found
+       לא קיים
       </Typography>
 
       <Typography variant="body2">
-        No results found for &nbsp;
+        לא נמצאו תוצאות עבור &nbsp;
         <strong>&quot;{query}&quot;</strong>.
-        <br /> Try checking for typos or using complete words.
       </Typography>
     </Paper>
   ) : (
