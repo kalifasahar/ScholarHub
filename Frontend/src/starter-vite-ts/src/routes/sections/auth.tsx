@@ -12,6 +12,7 @@ import AuthClassicLayout from 'src/layouts/auth/classic';
 // JWT
 const JwtLoginPage = lazy(() => import('src/pages/auth/jwt/login'));
 const JwtRegisterPage = lazy(() => import('src/pages/auth/jwt/register'));
+const JwtEmailVerificationPage = lazy(() => import('src/pages/auth/jwt/verify-email'));
 
 // ----------------------------------------------------------------------
 
@@ -39,6 +40,16 @@ const authJwt = {
         <GuestGuard>
           <AuthClassicLayout>
             <JwtRegisterPage />
+          </AuthClassicLayout>
+        </GuestGuard>
+      ),
+    },
+    {
+      path: 'verify-email',
+      element: (
+        <GuestGuard>
+          <AuthClassicLayout>
+            <JwtEmailVerificationPage />
           </AuthClassicLayout>
         </GuestGuard>
       ),

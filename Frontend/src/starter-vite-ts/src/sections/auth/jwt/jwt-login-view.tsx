@@ -40,14 +40,13 @@ export default function JwtLoginView() {
     password: Yup.string().required('נדרש למלא סיסמא'),
   });
 
-  const defaultValues = {
-    email: 'admin@bgu.ac.il',
-    password: 'admin',
-  };
+  // const defaultValues = {
+  //   email: 'admin@bgu.ac.il',
+  //   password: 'admin',
+  // };
 
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
-    defaultValues,
   });
 
   const {
@@ -106,9 +105,9 @@ export default function JwtLoginView() {
       />
 
       {/* TODO: need to handle forget password */}
-      <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
+      {/* <Link variant="body2" color="inherit" underline="always" sx={{ alignSelf: 'flex-end' }}>
         שכחת סיסמא?
-      </Link>
+      </Link> */}
 
       <LoadingButton
         fullWidth
