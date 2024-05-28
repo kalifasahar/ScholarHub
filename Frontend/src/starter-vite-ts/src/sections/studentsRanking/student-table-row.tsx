@@ -15,16 +15,16 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { IUserItem } from 'src/types/user';
+import { IStudentItem } from 'src/types/student';
 
-import UserQuickEditForm from './user-quick-edit-form';
+import UserQuickEditForm from './student-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   selected: boolean;
   onEditRow: VoidFunction;
-  row: IUserItem;
+  row: IStudentItem;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
 };
@@ -36,7 +36,7 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { name, role, status, email, phoneNumber } = row;
+  const { name, studentID, email, phoneNumber, department, degree, status, gradesAvarage, numOfArticles } = row;
 
   const confirm = useBoolean();
 
@@ -52,8 +52,6 @@ export default function UserTableRow({
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-          {/* <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} /> */}
-
           <ListItemText
             primary={name}
             secondary={email}
@@ -66,10 +64,11 @@ export default function UserTableRow({
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
-
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{studentID}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{degree}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{gradesAvarage}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{numOfArticles}</TableCell>
 
         <TableCell>
           <Label
@@ -116,23 +115,13 @@ export default function UserTableRow({
           <Iconify icon="solar:trash-bin-trash-bold" />
           Delete
         </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
       </CustomPopover>
 
       <ConfirmDialog
         open={confirm.value}
         onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
+        title="מחיקה"
+        content="האם אתה בטוח שברצונך למחוק?"
         action={
           <Button variant="contained" color="error" onClick={onDeleteRow}>
             Delete

@@ -13,20 +13,19 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-// import { countries } from 'src/assets/data';
 import { USER_STATUS_OPTIONS } from 'src/_mock';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form';
 
-import { IUserItem } from 'src/types/user';
+import { IStudentItem } from 'src/types/student';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
   onClose: VoidFunction;
-  currentUser?: IUserItem;
+  currentUser?: IStudentItem;
 };
 
 export default function UserQuickEditForm({ currentUser, open, onClose }: Props) {
@@ -36,7 +35,6 @@ export default function UserQuickEditForm({ currentUser, open, onClose }: Props)
     name: Yup.string().required('Name is required'),
     email: Yup.string().required('Email is required').email('Email must be a valid email address'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    role: Yup.string().required('Role is required'),
   });
 
   const defaultValues = useMemo(
@@ -45,7 +43,6 @@ export default function UserQuickEditForm({ currentUser, open, onClose }: Props)
       email: currentUser?.email || '',
       phoneNumber: currentUser?.phoneNumber || '',
       status: currentUser?.status,
-      role: currentUser?.role || '',
     }),
     [currentUser]
   );

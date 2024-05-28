@@ -39,22 +39,25 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { IStudentItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/student';
 
-import UserTableRow from '../user-table-row';
-import UserTableToolbar from '../user-table-toolbar';
-import UserTableFiltersResult from '../user-table-filters-result';
+import UserTableRow from '../student-table-row';
+import UserTableToolbar from '../student-table-toolbar';
+import UserTableFiltersResult from '../student-table-filters-result';
 
 // ----------------------------------------------------------------------
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'phoneNumber', label: 'Phone Number', width: 180 },
-  { id: 'company', label: 'Company', width: 220 },
-  { id: 'role', label: 'Role', width: 180 },
-  { id: 'status', label: 'Status', width: 100 },
+  { id: 'name', label: 'שם' },
+  { id: 'studentID', label: 'תעודת זהות', width: 180 },
+  { id: 'phoneNumber', label: 'מספר טלפון', width: 180 },
+  { id: 'department', label: 'מחלקה', width: 220 },
+  { id: 'degree', label: 'תואר', width: 180 },
+  { id: 'gradesAvarage', label: 'ממוצע ציונים', width: 180 },
+  { id: 'numOfArticles', label: 'מספר מאמרים', width: 180 },
+  { id: 'status', label: 'סטטוס', width: 100 },
   { id: '', width: 88 },
 ];
 
@@ -66,7 +69,7 @@ const defaultFilters: IUserTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function UserListView() {
+export default function StudentListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const table = useTable();
@@ -75,7 +78,7 @@ export default function UserListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IUserItem[]>(_userList);
+  const [tableData, setTableData] = useState<IStudentItem[]>(_userList);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -113,7 +116,7 @@ export default function UserListView() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
+      const deleteRow = tableData.filter((row) => row.studentID !== id);
 
       enqueueSnackbar('Delete success!');
 
@@ -125,7 +128,7 @@ export default function UserListView() {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
+    const deleteRows = tableData.filter((row) => !table.selected.includes(row.studentID));
 
     enqueueSnackbar('Delete success!');
 
@@ -155,41 +158,6 @@ export default function UserListView() {
     <>
       <Container maxWidth='lg'>
         <Card>
-          <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {['active', 'pending', 'banned', 'rejected'].includes(tab.value)
-                      ? tableData.filter((user) => user.status === tab.value).length
-                      : tableData.length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs>
-
           <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}
@@ -215,7 +183,7 @@ export default function UserListView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  dataFiltered.map((row) => row.id)
+                  dataFiltered.map((row) => row.studentID)
                 )
               }
               action={
@@ -239,7 +207,7 @@ export default function UserListView() {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      dataFiltered.map((row) => row.id)
+                      dataFiltered.map((row) => row.studentID)
                     )
                   }
                 />
@@ -252,12 +220,12 @@ export default function UserListView() {
                     )
                     .map((row) => (
                       <UserTableRow
-                        key={row.id}
+                        key={row.studentID}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
+                        selected={table.selected.includes(row.studentID)}
+                        onSelectRow={() => table.onSelectRow(row.studentID)}
+                        onDeleteRow={() => handleDeleteRow(row.studentID)}
+                        onEditRow={() => handleEditRow(row.studentID)}
                       />
                     ))}
 
@@ -278,7 +246,7 @@ export default function UserListView() {
             rowsPerPage={table.rowsPerPage}
             onPageChange={table.onChangePage}
             onRowsPerPageChange={table.onChangeRowsPerPage}
-            //
+            
             dense={table.dense}
             onChangeDense={table.onChangeDense}
           />
@@ -318,7 +286,7 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IUserItem[];
+  inputData: IStudentItem[];
   comparator: (a: any, b: any) => number;
   filters: IUserTableFilters;
 }) {
@@ -344,9 +312,9 @@ function applyFilter({
     inputData = inputData.filter((user) => user.status === status);
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
-  }
+  // if (role.length) {
+  //   inputData = inputData.filter((user) => role.includes(user.role));
+  // }
 
   return inputData;
 }
