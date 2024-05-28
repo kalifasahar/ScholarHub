@@ -69,15 +69,19 @@ const CONTENT = `
 
 export const _jobs = [...Array(12)].map((_, index) => {
 
-  const grant =  _mock.number.price(index).toString()
+  const grant =  _mock.number.price(index)
   
   return {
     id: _mock.id(index),
-    grant,
-    content: CONTENT,
     title: " הקרן הלאומית למדע (ISF) - מלגות פוסט דוק' במדעי החברה - תשפ",
-    expiredDate: _mock.time(index),
+    description: 'מצ"ב קול קורא של הקרן הלאומית למדע (ISF) במסלול מלגות מחייה לבתר-דוקטורנטים במדעי החברה',
     categories: JOB_SKILL_OPTIONS.slice(0, 7),
-    description: 'מצ"ב קול קורא של הקרן הלאומית למדע (ISF) במסלול מלגות מחייה לבתר-דוקטורנטים במדעי החברה'
+    content: CONTENT,
+    DepartmentExpirationDate:_mock.time(index),
+    CraitmanExpirationDarte: _mock.time(index),
+    grant,
+    grantDescription: '',
+    files:[]
+
   };
 });

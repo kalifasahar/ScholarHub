@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Avatar from '@mui/material/Avatar';
@@ -6,21 +6,15 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography, Modal, Stepper, Step, StepLabel, Button } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
 import { fDate } from 'src/utils/format-time';
-// import { fCurrency } from 'src/utils/format-number';
-
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
 import { IScholarshipItem } from 'src/types/scholarship';
-import Button from '@mui/material/Button';
-
-// ----------------------------------------------------------------------
 
 type Props = {
   job: IScholarshipItem;
@@ -33,7 +27,7 @@ const CategoryList = ({ categories }: { categories: string[] }) => (
   <Stack direction="row" spacing={3} sx={{ p: 0 }}>
     {categories.map((category, index) => (
       <Stack
-        key={index} 
+        key={index}
         spacing={0.5}
         flexShrink={0}
         direction="row"
@@ -48,16 +42,38 @@ const CategoryList = ({ categories }: { categories: string[] }) => (
   </Stack>
 );
 
-
 export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
   const popover = usePopover();
-
-  const { id, title, grant,categories,expiredDate} = job;
+  const { id, title, grant, categories, DepartmentExpirationDate } = job;
 
   const [openWizard, setOpenWizard] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+  const [scholarshipData, setScholarshipData] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const steps = ['Step 1', 'Step 2', 'Step 3'];
+  const steps = ['Step 1', 'Step 2', 'Step 3']; // Define the steps of the wizard
+
+  const fetchScholarshipData = async (scholarshipId: string) => {
+    setLoading(true);
+    setFetchError(null);
+    try {
+      
+      // const response = await fetch(`/api/scholarships/${scholarshipId}`);
+      // if (!response.ok) {
+      //   throw new Error('Failed to fetch scholarship data');
+      // }
+      // const data: IScholarshipItem = await response.json();
+      const data = `דגשים חשובים:\n\nההגשה הינה באמצעות מערכתISF online . לצורך כך יש לבצע אימות פרטים, ורק חוקרים שאומתו פרטיהם יוכלו להתחיל למלא טופס הרשמה להגשת בקשה.\nאימות הפרטים אינו מהווה הרשמה להגשת הבקשה\nרשאים להגיש בקשות לקרן רק מועמדים שהגישו את עבודת הדוקטורט עד 14 באוגוסט 2024, ושלא עברו יותר משנתיים מאז תאריך אישור עבודת הדוקטורט, לבין המועד האחרון להגשת בקשות, קרי - 14 באוגוסט 2024.\nרשאים להגיש חוקרים שהתואר השלישי שלהם הוא בכל אחד מתחומי מדעי החברה. במקרים בהם התואר השלישי אינו במדעי החברה, אך אחד המנחים לדוקטורט הוא מתחום מדעי החברה ובנוסף השתלמות הבתר-דוקטורט מתוכננת להיות במחלקה של מדעי החברה, ניתן להגיש בקשה.\nהמועד האחרון לרישום במאגר וביצוע אימות נתונים: 31 ביולי 2024, בשעה 13:00. חוקרים שלא ירשמו במועד, לא יהיו רשאים להגיש את ההצעה במועד ההגשה.\nהמועד האחרון להגשת הבקשות לקרן, לאחר אישור רשות המחקר: 14 באוגוסט 2024, בשעה 13:00.\n\nניתן להוריד את ההנחיות המעודכנות מאתר הקרן וממערכת ISF online.\n\nניתן גם לפנות לאורלי קיים מהרשות למו"פ בכתובת: orlykay@bgu.ac.il`;
+
+      
+      setScholarshipData(data);
+    } catch (error) {
+      setFetchError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -70,10 +86,12 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
   const handleReset = () => {
     setActiveStep(0);
     setOpenWizard(false);
+    setScholarshipData(null);
   };
 
   const handleOpenWizard = () => {
     setOpenWizard(true);
+    fetchScholarshipData(id);
   };
 
   const handleCloseWizard = () => {
@@ -81,85 +99,95 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
   };
 
   const renderWizardContent = (step: number) => {
-    switch (step) {
-      case 0:
-        return <Typography>Content for Step 1</Typography>;
-      case 1:
-        return <Typography>Content for Step 2</Typography>;
-      case 2:
-        return <Typography>Content for Step 3</Typography>;
-      default:
-        return 'Unknown step';
+    if (loading) {
+      return <Typography>Loading...</Typography>;
     }
+    if (fetchError) {
+      return <Typography color="error">{fetchError}</Typography>;
+    }
+    if (scholarshipData) {
+      switch (step) {
+        case 0:
+          return (
+            <Box sx={{ maxHeight: '400px', px: 2 }}>
+              <Typography variant="h6" gutterBottom fontWeight="bold">{title}</Typography>
+              <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>{scholarshipData}</Typography>
+              <Typography variant="body2">תאריך אחרון להגשה: {fDate(DepartmentExpirationDate)}</Typography>
+            </Box>
+          );
+        case 1:
+          return <Typography>Content for Step 2</Typography>;
+        case 2:
+          return <Typography>Content for Step 3</Typography>;
+        default:
+          return 'Unknown step';
+      }
+    }
+    return <Typography>No data available</Typography>;
   };
 
   return (
     <>
-<Card>
-    <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
-        <Iconify icon="eva:more-vertical-fill" />
-    </IconButton>
+      <Card>
+        <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
+          <Iconify icon="eva:more-vertical-fill" />
+        </IconButton>
 
-    <Stack sx={{ p: 3, pb: 2 }}>
-        <ListItemText
+        <Stack sx={{ p: 3, pb: 2 }}>
+          <ListItemText
             sx={{ mb: 1 }}
             primary={
-                <Typography variant="subtitle1" color="inherit">
-                    {title}
-                </Typography>
+              <Typography variant="subtitle1" color="inherit">
+                {title}
+              </Typography>
             }
             secondary={
-                <Stack spacing={0.5}>
-                    <Typography component="span" variant="body2" color="textSecondary">
-                        {job.description}
-                    </Typography>
-                    <Typography component="span" variant="body2" color="textPrimary">
-                        תאריך אחרון להגשה: {fDate(expiredDate)}
-                    </Typography>
-                </Stack>
+              <Stack spacing={0.5}>
+                <Typography component="span" variant="body2" color="textSecondary">
+                  {job.description}
+                </Typography>
+                <Typography component="span" variant="body2" color="textPrimary">
+                  תאריך אחרון להגשה: {fDate(DepartmentExpirationDate)}
+                </Typography>
+              </Stack>
             }
             primaryTypographyProps={{
-                typography: 'subtitle1',
+              typography: 'subtitle1',
             }}
             secondaryTypographyProps={{
-                component: 'div',
+              component: 'div',
             }}
-        />
-    </Stack>
-
-    <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
-
-    <Box sx={{ p: 2 }}>
-      {[
-        {
-          label: <CategoryList categories={categories} />,
-          // icon: <Iconify width={16} icon="solar:wad-of-money-bold" sx={{ flexShrink: 0 }} />,
-        },
-      ].map((item, index) => (
-        <Stack
-          key={index} // Use the index or another unique value for the key
-          spacing={0.5}
-          flexShrink={0}
-          direction="column"
-          alignItems="flex-start"
-          sx={{ color: 'text.disabled', minWidth: 0 }}
-        >
-          {item.label}
+          />
         </Stack>
-      ))}
-    </Box>
-    <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
 
-    <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-        <Button 
-            variant="contained"
-            color="primary"
-            onClick={() => console.log('Navigate to new page')}
-        >
+        <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
+
+        <Box sx={{ p: 2 }}>
+          {[
+            {
+              label: <CategoryList categories={categories} />,
+            },
+          ].map((item, index) => (
+            <Stack
+              key={index}
+              spacing={0.5}
+              flexShrink={0}
+              direction="column"
+              alignItems="flex-start"
+              sx={{ color: 'text.disabled', minWidth: 0 }}
+            >
+              {item.label}
+            </Stack>
+          ))}
+        </Box>
+        <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
+
+        <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+          <Button variant="contained" color="primary" onClick={handleOpenWizard}>
             פרטים נוספים
-        </Button>
-    </Box>
-</Card>
+          </Button>
+        </Box>
+      </Card>
 
       <CustomPopover
         open={popover.open}
@@ -198,6 +226,55 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
           Delete
         </MenuItem>
       </CustomPopover>
+
+  <Modal open={openWizard} onClose={handleCloseWizard}>
+  <Box
+    sx={{
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      width: '90%',
+      maxWidth: '900px',
+      bgcolor: 'background.paper',
+      boxShadow: 24,
+      p: 4,
+      maxHeight: '80vh',
+      overflowY: 'auto',
+      display: 'flex',
+      flexDirection: 'column',
+    }}
+  >
+    <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
+      {steps.map((label, index) => (
+        <Step key={index}>
+          <StepLabel>{label}</StepLabel>
+        </Step>
+      ))}
+    </Stepper>
+    <Box sx={{ flex: 1, my: 2, pb: 8, overflowY: 'auto' }}> {/* Added pb: 8 */}
+      {renderWizardContent(activeStep)}
+    </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2 }}>
+      <Button
+        color="inherit"
+        disabled={activeStep === 0}
+        onClick={handleBack}
+        sx={{ mr: 1 }}
+      >
+        אחורה
+      </Button>
+      <Box sx={{ flex: '1 1 auto' }} />
+      {activeStep === steps.length - 1 ? (
+        <Button onClick={handleReset}>הגש</Button>
+      ) : (
+        <Button onClick={handleNext}>הבא</Button>
+      )}
+    </Box>
+  </Box>
+</Modal>
+
+
     </>
   );
 }

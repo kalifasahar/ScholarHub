@@ -26,14 +26,15 @@ export default function JwtEmailVerificationView() {
           if (response.ok) {
             setStatus('success');
             setMessage('הדואר אלקטרוני אומת בהצלחה, בצע כעת התחברות למערכת.');
-            setTimeout(() => {
-              router.push('/auth/jwt/login');
-            }, 5000); // Redirect after 5 seconds
+            // setTimeout(() => {
+            //   router.push('/auth/jwt/login');
+            // }, 5000); // Redirect after 5 seconds
           } else {
             setStatus('error');
             setMessage("הדואר האלקטרוני לא אומת כראוי, אנא נסה להרשם בשנית.");
           }
         } catch (error) {
+          console.log(error)
           setStatus('error');
           setMessage("הדואר האלקטרוני לא אומת כראוי, אנא נסה להרשם בשנית.");
         }
