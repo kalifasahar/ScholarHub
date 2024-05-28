@@ -7,7 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { IUserTableFilters, IUserTableFilterValue } from 'src/types/student';
 
 // ----------------------------------------------------------------------
 

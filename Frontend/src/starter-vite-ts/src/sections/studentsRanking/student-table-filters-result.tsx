@@ -8,7 +8,7 @@ import Stack, { StackProps } from '@mui/material/Stack';
 
 import Iconify from 'src/components/iconify';
 
-import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { IUserTableFilters, IUserTableFilterValue } from 'src/types/student';
 
 // ----------------------------------------------------------------------
 
