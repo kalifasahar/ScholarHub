@@ -24,9 +24,12 @@ import JobSearch from './scholarship-search';
 
 // ----------------------------------------------------------------------
 
-export default function JobListView() {
+export default function ScholarshipsListView() {
 
   const [sortBy, setSortBy] = useState('עדכני');
+  const [selectedJob, setSelectedJob] =  useState<IScholarshipItem | null>(null);
+  const [openWizard, setOpenWizard] = useState(false);
+
 
   const [search, setSearch] = useState<{ query: string; results: IScholarshipItem[] }>({
     query: '',
@@ -38,8 +41,18 @@ export default function JobListView() {
     sortBy,
   });
 
-  const notFound = !dataFiltered.length;
-
+  const handleOpenWizard = useCallback((id: string) => {
+    const selected = _jobs.find(job => job.id === id);
+    if (selected) {
+      setSelectedJob(selected);
+      setOpenWizard(true);
+    }
+  }, []);
+  const handleOpenWizardFromButton = useCallback((job: IScholarshipItem) => {
+    setSelectedJob(job);
+    setOpenWizard(true);
+  }, []);
+  
   const handleSortBy = useCallback((newValue: string) => {
     setSortBy(newValue);
   }, []);
@@ -76,7 +89,7 @@ export default function JobListView() {
         query={search.query}
         results={search.results}
         onSearch={handleSearch}
-        hrefItem={(id: string) => paths.dashboard.one.details(id)}
+        onResultClick={handleOpenWizard} // Add this line
       />
 
       <Stack direction="row" spacing={1} flexShrink={0}>
@@ -97,7 +110,14 @@ export default function JobListView() {
       </Stack>
 
 
-      <JobList jobs={dataFiltered} />
+      <JobList 
+        jobs={dataFiltered} 
+        selectedJob={selectedJob}
+        openWizard={openWizard} 
+        setOpenWizard={setOpenWizard} 
+        onOpenWizard={handleOpenWizardFromButton} 
+
+/>
     </Container>
   );
 }

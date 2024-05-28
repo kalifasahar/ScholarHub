@@ -79,9 +79,9 @@ type Props = {
 
 const fakeUser: AuthUserType = {
   id: 'fake-id',
-  name: 'Fake User',
+  displayName: 'Fake User',
   email: 'fakeuser@example.com',
-  role: 'user', // Add any other necessary fields based on your AuthUserType definition
+  role: 'student', 
 };
 
 export function AuthProvider({ children }: Props) {
@@ -94,8 +94,16 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        // const res = await axios.get(endpoints.auth.me);
-
+        // const res = await axios.get(endpoints.auth.me,
+        //   {
+        //     headers: {
+        //       'Authorization': `Bearer ${accessToken}`
+        //     }
+        // });
+        // console.log(res);
+        // const {username,email} = res.data;
+        // console.log(username)
+        // console.log(email)
         // const { user } = res.data;
         const  user  = fakeUser;
 
@@ -142,8 +150,12 @@ export function AuthProvider({ children }: Props) {
     const res = await axios.post(endpoints.auth.login, data);
 
     console.log(res)
-
-    const { access_token, user } = res.data;
+    const { access_token } = res.data;
+    const role  = res.data.result.data.role
+    const user = {
+      email,
+      role
+    }
     console.log(access_token)
     console.log(user)
 
