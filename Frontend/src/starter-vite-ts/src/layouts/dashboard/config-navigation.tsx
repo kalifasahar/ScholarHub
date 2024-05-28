@@ -51,7 +51,7 @@ export function useNavData() {
         subheader: 'ניהול',
         items: [
           { title: 'דירוג סטונדטים', path: paths.dashboard.group.root, icon: ICONS.user },
-          // { title: 'four', path: paths.dashboard.group.root, icon: ICONS.user },
+          { title: 'יצירת מלגה', path: paths.dashboard.group.five, icon: ICONS.kanban },
           // { title: 'five', path: paths.dashboard.group.five, icon: ICONS.user },
           // { title: 'six', path: paths.dashboard.group.six, icon: ICONS.user },
         ],

@@ -70,9 +70,7 @@ export default function UserListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const table = useTable();
-
-  // const settings = useSettingsContext();
-
+  
   const router = useRouter();
 
   const confirm = useBoolean();
@@ -156,28 +154,6 @@ export default function UserListView() {
   return (
     <>
       <Container maxWidth='lg'>
-        <CustomBreadcrumbs
-          heading="List"
-          links={[
-            { name: 'Dashboard', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
-            { name: 'List' },
-          ]}
-          action={
-            <Button
-              component={RouterLink}
-              href={paths.dashboard.user.new}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New User
-            </Button>
-          }
-          sx={{
-            mb: { xs: 3, md: 5 },
-          }}
-        />
-
         <Card>
           <Tabs
             value={filters.status}
@@ -217,8 +193,6 @@ export default function UserListView() {
           <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}
-            //
-            roleOptions={_roles}
           />
 
           {canReset && (

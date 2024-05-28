@@ -113,11 +113,11 @@ const applyFilter = ({
 }) => {
   // SORT BY
   if (sortBy === 'עדכני') {
-    inputData = orderBy(inputData, ['expiredDate'], ['desc']);
+    inputData = orderBy(inputData, ['DepartmentExpirationDate'], ['desc']);
   }
 
   if (sortBy === 'ישן') {
-    inputData = orderBy(inputData, ['expiredDate'], ['asc']);
+    inputData = orderBy(inputData, ['DepartmentExpirationDate'], ['asc']);
   }
 
 

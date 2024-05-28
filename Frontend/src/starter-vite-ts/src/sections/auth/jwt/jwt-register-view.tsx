@@ -75,13 +75,10 @@ export default function JwtRegisterView() {
       // Set success message
       setSuccessMsg('הודעת אימות נשלחה בהצלחה לדואר האלקטרוני, אנא לחץ על הקישור על מנת לסיים את תהליך ההרשמה בהצלחה');
 
-      // // If failed return to 'Log-in' page, if success route to dashboard
-      // router.push(returnTo || PATH_AFTER_LOGIN);
-
       // Redirect to login page after 5 seconds
       setTimeout(() => {
         router.push(paths.auth.jwt.login);
-      }, 5000);
+      }, 7000);
     } catch (error) {
       console.error(error);
       setSuccessMsg(''); // Clear success message if there's an error

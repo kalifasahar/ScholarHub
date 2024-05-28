@@ -1,0 +1,28 @@
+.ql-editor {
+    line-height: 1.5;
+    direction: rtl; /* Add this line */
+    text-align: right; /* Add this line */
+  }
+  
+  .ql-editor ul,
+  .ql-editor ol {
+    padding-right: 40px; /* Change this line for RTL */
+  }
+  
+  .ql-editor .ql-align-right {
+    text-align: right;
+  }
+  
+  .ql-editor .ql-align-left {
+    text-align: left;
+  }
+  
+  .ql-toolbar .ql-header .ql-picker-label::before,
+  .ql-toolbar .ql-header .ql-picker-options {
+    font-size: 50px; /* Adjust to ensure it fits well */
+  }
+  
+  .ql-toolbar .ql-picker.ql-header {
+    width: auto; /* Ensure the width fits the content */
+  }
+  

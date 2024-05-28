@@ -28,9 +28,7 @@ type Payload = {
   [Types.LOGIN]: {
     user: AuthUserType;
   };
-  [Types.REGISTER]: {
-    user: AuthUserType;
-  };
+  [Types.REGISTER]: undefined
   [Types.LOGOUT]: undefined;
 };
 
@@ -59,7 +57,7 @@ const reducer = (state: AuthStateType, action: ActionsType) => {
   if (action.type === Types.REGISTER) {
     return {
       ...state,
-      user: action.payload.user,
+      user: null,
     };
   }
   if (action.type === Types.LOGOUT) {
@@ -79,6 +77,13 @@ type Props = {
   children: React.ReactNode;
 };
 
+const fakeUser: AuthUserType = {
+  id: 'fake-id',
+  name: 'Fake User',
+  email: 'fakeuser@example.com',
+  role: 'user', // Add any other necessary fields based on your AuthUserType definition
+};
+
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -89,9 +94,11 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        const res = await axios.get(endpoints.auth.me);
+        // const res = await axios.get(endpoints.auth.me);
 
-        const { user } = res.data;
+        // const { user } = res.data;
+        const  user  = fakeUser;
+
 
         dispatch({
           type: Types.INITIAL,
@@ -136,17 +143,18 @@ export function AuthProvider({ children }: Props) {
 
     console.log(res)
 
-    const { accessToken, user } = res.data;
-    
+    const { access_token, user } = res.data;
+    console.log(access_token)
+    console.log(user)
 
-    setSession(accessToken);
+    setSession(access_token);
 
     dispatch({
       type: Types.LOGIN,
       payload: {
         user: {
           ...user,
-          accessToken,
+          access_token,
         },
       },
     });
@@ -164,23 +172,12 @@ export function AuthProvider({ children }: Props) {
         role
       };
       console.log(endpoints.auth.register)
-      console.log(data)
       const res = await axios.post(endpoints.auth.register, data);
 
       console.log(res)
 
-      const { accessToken, user } = res.data;
-
-      sessionStorage.setItem(STORAGE_KEY, accessToken);
-
       dispatch({
         type: Types.REGISTER,
-        payload: {
-          user: {
-            ...user,
-            accessToken,
-          },
-        },
       });
     },
     []

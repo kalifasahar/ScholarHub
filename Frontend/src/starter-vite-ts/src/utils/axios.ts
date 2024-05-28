@@ -30,10 +30,10 @@ export const endpoints = {
   kanban: '/api/kanban',
   calendar: '/api/calendar',
   auth: {
-    me: '/api/auth/me',
-    login: '/api/auth/login',
-    register: '/api/auth/register',
-    authenticate: '/api/auth/authenticate'
+    me: '/api/users/me',
+    login: '/api/users/login',
+    register: '/api/users/register',
+    authenticate: '/api/users/authenticate'
   },
   mail: {
     list: '/api/mail/list',

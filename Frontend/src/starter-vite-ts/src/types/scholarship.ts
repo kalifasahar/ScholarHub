@@ -1,9 +1,14 @@
-export type IScholarshipItem = {
-  id: string;
-  title: string;
-  content: string;
-  categories: string[];
-  expiredDate: Date;
-  grant: string;
-  description: string;
-};
+type IFile = File;
+
+  export type IScholarshipItem = {
+    id: string;
+    title: string;
+    description: string;
+    categories: string[];
+    content: string;
+    DepartmentExpirationDate: Date;
+    CraitmanExpirationDarte: Date;
+    grant: number;
+    grantDescription: string;
+    files:IFile[];
+  };

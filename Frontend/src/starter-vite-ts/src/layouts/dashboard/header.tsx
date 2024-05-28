@@ -12,15 +12,8 @@ import { bgBlur } from 'src/theme/css';
 
 import Logo from 'src/components/logo';
 import SvgColor from 'src/components/svg-color';
-// import { useSettingsContext } from 'src/components/settings';
-
-import Searchbar from '../common/searchbar';
 import { NAV, HEADER } from '../config-layout';
-// import SettingsButton from '../common/settings-button';
 import AccountPopover from '../common/account-popover';
-// import ContactsPopover from '../common/contacts-popover';
-// import LanguagePopover from '../common/language-popover';
-// import NotificationsPopover from '../common/notifications-popover'; todo notification
 
 // ----------------------------------------------------------------------
 
@@ -31,12 +24,7 @@ type Props = {
 export default function Header({ onOpenNav }: Props) {
   const theme = useTheme();
 
-  // const settings = useSettingsContext();
-
-  // const isNavHorizontal = settings.themeLayout === 'horizontal';
   const isNavHorizontal = false;
-
-  // const isNavMini = settings.themeLayout === 'mini';
 
   const lgUp = useResponsive('up', 'lg');
 
@@ -53,9 +41,6 @@ export default function Header({ onOpenNav }: Props) {
           <SvgColor src="/assets/icons/navbar/ic_menu_item.svg" />
         </IconButton>
       )}
-
-      {/* <Searchbar /> */}
-
       <Stack
         flexGrow={1}
         direction="row"
@@ -63,14 +48,6 @@ export default function Header({ onOpenNav }: Props) {
         justifyContent="flex-end"
         spacing={{ xs: 0.5, sm: 1 }}
       >
-        {/* <LanguagePopover /> */}
-
-        {/* <NotificationsPopover /> todo notification */}
-
-        {/* <ContactsPopover /> */}
-
-        {/* <SettingsButton /> */}
-
         <AccountPopover />
       </Stack>
     </>
@@ -94,15 +71,6 @@ export default function Header({ onOpenNav }: Props) {
             height: HEADER.H_DESKTOP_OFFSET,
           })
           ,
-          // ...(isNavHorizontal && {
-          //   width: 1,
-          //   bgcolor: 'background.default',
-          //   height: HEADER.H_DESKTOP_OFFSET,
-          //   borderBottom: `dashed 1px ${theme.palette.divider}`,
-          // }),
-          // ...(isNavMini && {
-          //   width: `calc(100% - ${NAV.W_MINI + 1}px)`,
-          // }),
         }),
       }}
     >
