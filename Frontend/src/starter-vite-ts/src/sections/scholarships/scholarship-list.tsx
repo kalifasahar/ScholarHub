@@ -8,27 +8,31 @@ import { useRouter } from 'src/routes/hooks';
 
 import { IScholarshipItem } from 'src/types/scholarship';
 
-import JobItem from './scholarship-item';
+import ScholarshipItem from './scholarship-item';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   jobs: IScholarshipItem[];
+  selectedJob: IScholarshipItem | null;
+  openWizard: boolean;
+  setOpenWizard: (open: boolean) => void;
+  onOpenWizard: (job: IScholarshipItem) => void;
 };
 
-export default function JobList({ jobs }: Props) {
+export default function JobList({ jobs, selectedJob, openWizard, setOpenWizard, onOpenWizard }: Props) {
   const router = useRouter();
 
   const handleView = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.one.details(id));
+      router.push(paths.dashboard.scholarships.details(id));
     },
     [router]
   );
 
   const handleEdit = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.one.edit(id));
+      router.push(paths.dashboard.scholarships.edit(id));
     },
     [router]
   );
@@ -49,12 +53,16 @@ export default function JobList({ jobs }: Props) {
         }}
       >
         {jobs.map((job) => (
-          <JobItem
+          <ScholarshipItem
             key={job.id}
             job={job}
             onView={() => handleView(job.id)}
             onEdit={() => handleEdit(job.id)}
             onDelete={() => handleDelete(job.id)}
+            selectedJob={selectedJob} 
+            openWizard={openWizard} 
+            setOpenWizard={setOpenWizard} 
+            onOpenWizard={() => onOpenWizard(job)}
           />
         ))}
       </Box>

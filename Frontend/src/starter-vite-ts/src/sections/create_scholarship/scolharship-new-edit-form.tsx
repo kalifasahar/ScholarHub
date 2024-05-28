@@ -53,12 +53,12 @@ const StyledReactQuill = styled(ReactQuill)(({ theme }) => ({
   '& .ql-container': {
     minHeight: '200px',
     height: '400px',
-    direction: 'rtl', // Add this line
-    textAlign: 'right', // Add this line
+    direction: 'rtl',
+    textAlign: 'right',
   },
   '& .ql-editor': {
-    direction: 'rtl', // Add this line
-    textAlign: 'right', // Add this line
+    direction: 'rtl',
+    textAlign: 'right', 
   },
 }));
   
@@ -91,8 +91,6 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
   const mdUp = useResponsive('up', 'md');
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const [includeTaxes, setIncludeTaxes] = useState(false);
 
   const NewScholarshipSchema = Yup.object().shape({
     title: Yup.string().required('Name is required'),
@@ -184,7 +182,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
             פרטים
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            שם מלגה, הסבר קצר...
+            שם מלגה, הסבר קצר, אוכלוסיית יעד...
           </Typography>
         </Grid>
       )}
@@ -199,7 +197,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
             <RHFTextField name="subDescription" label="תיאור קצר" multiline rows={4} />
 
             <Stack spacing={1.5}>
-              <Typography variant="subtitle2">Content</Typography>
+              <Typography variant="subtitle2">אוכלוסיית יעד וקריטריונים:</Typography>
               <StyledReactQuill 
                 value={values.content} 
                 onChange={(value) => setValue('content', value)} 

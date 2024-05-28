@@ -8,11 +8,11 @@ import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
-const IndexPage = lazy(() => import('src/pages/dashboard/one'));
-const PageTwo = lazy(() => import('src/pages/dashboard/two'));
+const IndexPage = lazy(() => import('src/pages/dashboard/scholarships_index'));
+const MyScholarships = lazy(() => import('src/pages/dashboard/my_scholarships_index'));
 const PageThree = lazy(() => import('src/pages/dashboard/three'));
 const PageFour = lazy(() => import('src/pages/dashboard/ranking'));
-const PageFive = lazy(() => import('src/pages/dashboard/five'));
+const CreateScholarhip = lazy(() => import('src/pages/dashboard/create_scholarship_index'));
 const PageSix = lazy(() => import('src/pages/dashboard/six'));
 
 // ----------------------------------------------------------------------
@@ -31,13 +31,13 @@ export const dashboardRoutes = [
     ),
     children: [
       { element: <IndexPage />, index: true },
-      { path: 'two', element: <PageTwo /> },
+      { path: 'two', element: <MyScholarships /> },
       { path: 'three', element: <PageThree /> },
       {
         path: 'group',
         children: [
           { element: <PageFour />, index: true },
-          { path: 'five', element: <PageFive /> },
+          { path: 'five', element: <CreateScholarhip /> },
           { path: 'six', element: <PageSix /> },
         ],
       },
