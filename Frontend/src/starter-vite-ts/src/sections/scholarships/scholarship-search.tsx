@@ -20,25 +20,16 @@ type Props = {
   query: string;
   results: IScholarshipItem[];
   onSearch: (inputValue: string) => void;
-  hrefItem: (id: string) => string;
+  onResultClick: (id: string) => void; 
 };
 
-export default function JobSearch({ query, results, onSearch, hrefItem }: Props) {
+export default function JobSearch({ query, results, onSearch ,onResultClick }: Props) {
   const router = useRouter();
 
-  const handleClick = (id: string) => {
-    router.push(hrefItem(id));
+  const handleResultClick = (id: string) => {
+    onResultClick(id); 
   };
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (query) {
-      if (event.key === 'Enter') {
-        const selectProduct = results.filter((job) => job.title === query)[0];
-
-        handleClick(selectProduct.id);
-      }
-    }
-  };
 
   return (
     <Autocomplete
@@ -54,7 +45,6 @@ export default function JobSearch({ query, results, onSearch, hrefItem }: Props)
         <TextField
           {...params}
           placeholder="Search..."
-          onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -70,7 +60,7 @@ export default function JobSearch({ query, results, onSearch, hrefItem }: Props)
         const parts = parse(job.title, matches);
 
         return (
-          <Box component="li" {...props} onClick={() => handleClick(job.id)} key={job.id}>
+          <Box component="li" {...props} onClick={() => handleResultClick(job.id)} key={job.id}>
             <div>
               {parts.map((part, index) => (
                 <Typography

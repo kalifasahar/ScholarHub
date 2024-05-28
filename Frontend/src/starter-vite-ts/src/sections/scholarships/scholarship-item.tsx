@@ -21,6 +21,10 @@ type Props = {
   onView: VoidFunction;
   onEdit: VoidFunction;
   onDelete: VoidFunction;
+  selectedJob: IScholarshipItem | null;
+  openWizard: boolean;
+  setOpenWizard: (open: boolean) => void;
+  onOpenWizard: () => void;
 };
 
 const CategoryList = ({ categories }: { categories: string[] }) => (
@@ -42,17 +46,21 @@ const CategoryList = ({ categories }: { categories: string[] }) => (
   </Stack>
 );
 
-export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
+export default function ScholarshipItem({ job, onView, onEdit, onDelete, selectedJob ,openWizard, setOpenWizard, onOpenWizard }: Props) {
   const popover = usePopover();
   const { id, title, grant, categories, DepartmentExpirationDate } = job;
-
-  const [openWizard, setOpenWizard] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
-  const [scholarshipData, setScholarshipData] = useState<string | null>(null);
+  const [scholarshipsData, setScholarshipsData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   const steps = ['Step 1', 'Step 2', 'Step 3']; // Define the steps of the wizard
+
+  useEffect(() => {
+    if (selectedJob) {
+      fetchScholarshipData(selectedJob.id);
+    }
+  }, [selectedJob]);
 
   const fetchScholarshipData = async (scholarshipId: string) => {
     setLoading(true);
@@ -67,13 +75,14 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
       const data = `דגשים חשובים:\n\nההגשה הינה באמצעות מערכתISF online . לצורך כך יש לבצע אימות פרטים, ורק חוקרים שאומתו פרטיהם יוכלו להתחיל למלא טופס הרשמה להגשת בקשה.\nאימות הפרטים אינו מהווה הרשמה להגשת הבקשה\nרשאים להגיש בקשות לקרן רק מועמדים שהגישו את עבודת הדוקטורט עד 14 באוגוסט 2024, ושלא עברו יותר משנתיים מאז תאריך אישור עבודת הדוקטורט, לבין המועד האחרון להגשת בקשות, קרי - 14 באוגוסט 2024.\nרשאים להגיש חוקרים שהתואר השלישי שלהם הוא בכל אחד מתחומי מדעי החברה. במקרים בהם התואר השלישי אינו במדעי החברה, אך אחד המנחים לדוקטורט הוא מתחום מדעי החברה ובנוסף השתלמות הבתר-דוקטורט מתוכננת להיות במחלקה של מדעי החברה, ניתן להגיש בקשה.\nהמועד האחרון לרישום במאגר וביצוע אימות נתונים: 31 ביולי 2024, בשעה 13:00. חוקרים שלא ירשמו במועד, לא יהיו רשאים להגיש את ההצעה במועד ההגשה.\nהמועד האחרון להגשת הבקשות לקרן, לאחר אישור רשות המחקר: 14 באוגוסט 2024, בשעה 13:00.\n\nניתן להוריד את ההנחיות המעודכנות מאתר הקרן וממערכת ISF online.\n\nניתן גם לפנות לאורלי קיים מהרשות למו"פ בכתובת: orlykay@bgu.ac.il`;
 
       
-      setScholarshipData(data);
+      setScholarshipsData(data);
     } catch (error) {
       setFetchError(error.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -86,13 +95,9 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
   const handleReset = () => {
     setActiveStep(0);
     setOpenWizard(false);
-    setScholarshipData(null);
+    setScholarshipsData(null);
   };
 
-  const handleOpenWizard = () => {
-    setOpenWizard(true);
-    fetchScholarshipData(id);
-  };
 
   const handleCloseWizard = () => {
     setOpenWizard(false);
@@ -105,13 +110,13 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
     if (fetchError) {
       return <Typography color="error">{fetchError}</Typography>;
     }
-    if (scholarshipData) {
+    if (scholarshipsData) {
       switch (step) {
         case 0:
           return (
             <Box sx={{ maxHeight: '400px', px: 2 }}>
               <Typography variant="h6" gutterBottom fontWeight="bold">{title}</Typography>
-              <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>{scholarshipData}</Typography>
+              <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>{scholarshipsData}</Typography>
               <Typography variant="body2">תאריך אחרון להגשה: {fDate(DepartmentExpirationDate)}</Typography>
             </Box>
           );
@@ -183,7 +188,7 @@ export default function JobItem({ job, onView, onEdit, onDelete }: Props) {
         <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
 
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-          <Button variant="contained" color="primary" onClick={handleOpenWizard}>
+          <Button variant="contained" color="primary" onClick={onOpenWizard}>
             פרטים נוספים
           </Button>
         </Box>

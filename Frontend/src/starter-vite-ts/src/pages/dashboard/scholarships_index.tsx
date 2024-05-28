@@ -1,6 +1,7 @@
+// tomer
 import { Helmet } from 'react-helmet-async';
 
-import FiveView from 'src/sections/five/view';
+import OneView from 'src/sections/scholarships/view';
 
 // ----------------------------------------------------------------------
 
@@ -8,10 +9,10 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Five</title>
+        <title> Dashboard: Scholarships</title>
       </Helmet>
 
-      <FiveView />
+      <OneView />
     </>
   );
 }
