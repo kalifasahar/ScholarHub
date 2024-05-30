@@ -35,10 +35,8 @@ export const endpoints = {
     register: '/api/users/register',
     authenticate: '/api/users/authenticate'
   },
-  mail: {
-    list: '/api/mail/list',
-    details: '/api/mail/details',
-    labels: '/api/mail/labels',
+  scholarship: {
+    all: '/api/scholarship/get_all',
   },
   post: {
     list: '/api/post/list',

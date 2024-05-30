@@ -48,7 +48,7 @@ const CategoryList = ({ categories }: { categories: string[] }) => (
 
 export default function ScholarshipItem({ job, onView, onEdit, onDelete, selectedJob ,openWizard, setOpenWizard, onOpenWizard }: Props) {
   const popover = usePopover();
-  const { id, title, grant, categories, DepartmentExpirationDate } = job;
+  const { id, title, grant, categories, ExpirationDate } = job;
   const [activeStep, setActiveStep] = useState(0);
   const [scholarshipsData, setScholarshipsData] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -117,7 +117,7 @@ export default function ScholarshipItem({ job, onView, onEdit, onDelete, selecte
             <Box sx={{ maxHeight: '400px', px: 2 }}>
               <Typography variant="h6" gutterBottom fontWeight="bold">{title}</Typography>
               <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>{scholarshipsData}</Typography>
-              <Typography variant="body2">תאריך אחרון להגשה: {fDate(DepartmentExpirationDate)}</Typography>
+              <Typography variant="body2">תאריך אחרון להגשה: {fDate(ExpirationDate)}</Typography>
             </Box>
           );
         case 1:
@@ -152,7 +152,7 @@ export default function ScholarshipItem({ job, onView, onEdit, onDelete, selecte
                   {job.description}
                 </Typography>
                 <Typography component="span" variant="body2" color="textPrimary">
-                  תאריך אחרון להגשה: {fDate(DepartmentExpirationDate)}
+                  תאריך אחרון להגשה: {fDate(ExpirationDate)}
                 </Typography>
               </Stack>
             }

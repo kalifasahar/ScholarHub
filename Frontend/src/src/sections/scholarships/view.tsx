@@ -1,21 +1,15 @@
+import axios, {endpoints} from 'src/utils/axios';
+
 import orderBy from 'lodash/orderBy';
-import { useState, useCallback } from 'react';
+import { useState, useCallback , useEffect} from 'react';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
-import { useBoolean } from 'src/hooks/use-boolean';
 
 import { _jobs, JOB_SORT_OPTIONS } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
-// import EmptyContent from 'src/components/empty-content';
-// import { useSettingsContext } from 'src/components/settings';
-
-// import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import { IScholarshipItem } from 'src/types/scholarship';
 import JobList from './scholarship-list';
@@ -29,17 +23,31 @@ export default function ScholarshipsListView() {
   const [sortBy, setSortBy] = useState('עדכני');
   const [selectedJob, setSelectedJob] =  useState<IScholarshipItem | null>(null);
   const [openWizard, setOpenWizard] = useState(false);
-
-
+  const [jobs, setJobs] = useState<IScholarshipItem[]>([]);
   const [search, setSearch] = useState<{ query: string; results: IScholarshipItem[] }>({
     query: '',
     results: [],
   });
 
+  useEffect(() => {
+    axios.get(endpoints.scholarship.all)
+      .then(response => {
+        setJobs(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching jobs:', error);
+      });
+  }, []);
+
   const dataFiltered = applyFilter({
     inputData: _jobs,
     sortBy,
   });
+
+  useEffect(() => {
+    // remove this later
+    console.log('dataFiltered updated', dataFiltered);
+  }, [dataFiltered]);
 
   const handleOpenWizard = useCallback((id: string) => {
     const selected = _jobs.find(job => job.id === id);
@@ -133,11 +141,11 @@ const applyFilter = ({
 }) => {
   // SORT BY
   if (sortBy === 'עדכני') {
-    inputData = orderBy(inputData, ['DepartmentExpirationDate'], ['desc']);
+    inputData = orderBy(inputData, ['ExpirationDate'], ['desc']);
   }
 
   if (sortBy === 'ישן') {
-    inputData = orderBy(inputData, ['DepartmentExpirationDate'], ['asc']);
+    inputData = orderBy(inputData, ['ExpirationDate'], ['asc']);
   }
 
 

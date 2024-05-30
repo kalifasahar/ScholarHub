@@ -77,11 +77,9 @@ export const _jobs = [...Array(12)].map((_, index) => {
     description: 'מצ"ב קול קורא של הקרן הלאומית למדע (ISF) במסלול מלגות מחייה לבתר-דוקטורנטים במדעי החברה',
     categories: JOB_SKILL_OPTIONS.slice(0, 7),
     content: CONTENT,
-    DepartmentExpirationDate:_mock.time(index),
-    CraitmanExpirationDarte: _mock.time(index),
+    ExpirationDate:_mock.time(index),
+    additionalgrantDescription: "למשך עד שנתיים.  \n   המלגה מותנית במצ'ינג: \n    60,000 ₪ במימון  \n    5,000 ₪ כמצ'ינג מהמחלקה / המנחה.",
     grant,
-    grantDescription: '',
-    files:[]
 
   };
 });
