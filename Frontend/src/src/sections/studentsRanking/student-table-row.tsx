@@ -1,5 +1,4 @@
 import Button from '@mui/material/Button';
-import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -7,6 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -27,6 +27,7 @@ type Props = {
   row: IStudentItem;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onRankingChange: (id: string, rank: number) => void;
 };
 
 export default function UserTableRow({
@@ -35,8 +36,12 @@ export default function UserTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
+  onRankingChange,
 }: Props) {
-  const { name, studentID, email, phoneNumber, department, degree, status, gradesAvarage, numOfArticles } = row;
+  const { rank, name, studentID, email,
+     phoneNumber, department, degree, status, gradesAvarage, numOfArticles,
+      gender, yearOfBirth, supervisor, fieldOfResearch, topicOfReasearch, dateOfStartDgree,
+       instituteOfBechlor, facultyOfBechlor, departmentOfBechlor, rankArticles } = row;
 
   const confirm = useBoolean();
 
@@ -44,11 +49,40 @@ export default function UserTableRow({
 
   const popover = usePopover();
 
+  const handleRankingChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newRank = Number(event.target.value);
+    onRankingChange(studentID, newRank);
+  };
+
   return (
     <>
       <TableRow hover selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox checked={selected} onClick={onSelectRow} />
+        <TableCell>
+          <TextField
+            type="number"
+            value={rank || ''}
+            onChange={handleRankingChange}
+            inputProps={{ min: 0 }}
+            sx={{
+              width: '5rem', // Wider input
+              '& .MuiInputBase-input': {
+                padding: '0.5rem', // Add some padding
+                textAlign: 'center', // Center-align the text
+              },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: '8px', // Rounded corners
+                '& fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.23)', // Default border color
+                },
+                '&:hover fieldset': {
+                  borderColor: 'rgba(0, 0, 0, 0.87)', // Border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'orange', // Border color when focused
+                },
+              },
+            }}
+          />
         </TableCell>
 
         <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
@@ -65,10 +99,23 @@ export default function UserTableRow({
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{phoneNumber}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{studentID}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{gender}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{yearOfBirth}</TableCell>
+
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{department}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{degree}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{dateOfStartDgree}</TableCell>
+
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{gradesAvarage}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{numOfArticles}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{rankArticles}</TableCell>
+
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{supervisor}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{fieldOfResearch}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{topicOfReasearch}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{instituteOfBechlor}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{facultyOfBechlor}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{departmentOfBechlor}</TableCell>
 
         <TableCell>
           <Label
@@ -84,6 +131,8 @@ export default function UserTableRow({
           </Label>
         </TableCell>
 
+        
+
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
           <Tooltip title="Quick Edit" placement="top" arrow>
             <IconButton color={quickEdit.value ? 'inherit' : 'default'} onClick={quickEdit.onTrue}>
@@ -95,6 +144,10 @@ export default function UserTableRow({
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
         </TableCell>
+
+        {/* <TableCell padding="checkbox">
+          <Checkbox checked={selected} onClick={onSelectRow} />
+        </TableCell> */}
       </TableRow>
 
       <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />

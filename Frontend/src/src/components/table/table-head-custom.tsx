@@ -26,27 +26,27 @@ type Props = {
   order?: 'asc' | 'desc';
   orderBy?: string;
   headLabel: any[];
-  rowCount?: number;
-  numSelected?: number;
+  // rowCount?: number;
+  // numSelected?: number;
   onSort?: (id: string) => void;
-  onSelectAllRows?: (checked: boolean) => void;
+  // onSelectAllRows?: (checked: boolean) => void;
   sx?: SxProps<Theme>;
 };
 
 export default function TableHeadCustom({
   order,
   orderBy,
-  rowCount = 0,
+  // rowCount = 0,
   headLabel,
-  numSelected = 0,
+  // numSelected = 0,
   onSort,
-  onSelectAllRows,
+  // onSelectAllRows,
   sx,
 }: Props) {
   return (
     <TableHead sx={sx}>
       <TableRow>
-        {onSelectAllRows && (
+        {/* {onSelectAllRows && (
           <TableCell padding="checkbox">
             <Checkbox
               indeterminate={!!numSelected && numSelected < rowCount}
@@ -56,7 +56,7 @@ export default function TableHeadCustom({
               }
             />
           </TableCell>
-        )}
+        )} */}
 
         {headLabel.map((headCell) => (
           <TableCell
