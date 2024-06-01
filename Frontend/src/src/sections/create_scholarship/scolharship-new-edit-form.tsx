@@ -1,12 +1,11 @@
 import * as Yup from 'yup';
-import { useForm, useFieldArray, Resolver ,Controller, Control } from 'react-hook-form';
+import { useForm, useFieldArray, Resolver, Controller, Control } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 
 import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css'; 
-import './custom-quill.css';
+import 'react-quill/dist/quill.snow.css';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -24,28 +23,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import FormProvider, {
-  RHFSelect,
-  RHFEditor,
-//   RHFUpload,
-  RHFSwitch,
   RHFTextField,
-  RHFMultiSelect,
-  RHFMultiCheckbox,
 } from 'src/components/hook-form';
 import { IScholarshipItem } from 'src/types/scholarship';
+import axios, { endpoints } from 'src/utils/axios';
 
 type FormValues = {
   title: string;
   categories: { value: string }[];
   grant: number;
   description: string;
-  additionalgrantDescription: string; 
+  additionalgrantDescription: string;
   content: string;
   ExpirationDate: Date;
 };
@@ -65,7 +58,7 @@ const StyledReactQuill = styled(ReactQuill)(({ theme }) => ({
   },
   '& .ql-editor': {
     direction: 'rtl',
-    textAlign: 'right', 
+    textAlign: 'right',
   },
 }));
 
@@ -121,22 +114,22 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
     })).max(10, 'Can have up to 10 categories'),
     grant: Yup.number().moreThan(0, 'מענק צריך להיות גדול מ-0'),
     description: Yup.string().required('תיאור הוא חובה'),
-    additionalgrantDescription: Yup.string().required('Additional description is required'), 
+    additionalgrantDescription: Yup.string().required('Additional description is required'),
     content: Yup.string()
-    .test('is-not-empty', 'יש למלא תוכן', (value) => {
-      if (!value) return false;
-      const strippedContent = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
-      return strippedContent.length > 0;
-    })
-    .required('יש למלא תוכן'),
-      ExpirationDate: Yup.date().required('יש לציין תאריך סיום')
+      .test('is-not-empty', 'יש למלא תוכן', (value) => {
+        if (!value) return false;
+        const strippedContent = value.replace(/<\/?[^>]+(>|$)/g, "").trim();
+        return strippedContent.length > 0;
+      })
+      .required('יש למלא תוכן'),
+    ExpirationDate: Yup.date().required('יש לציין תאריך סיום')
   });
 
   const defaultValues = useMemo(
     () => ({
       title: currentScholarship?.title || '',
       description: currentScholarship?.description || '',
-      additionalgrantDescription: currentScholarship?.additionalgrantDescription || '', 
+      additionalgrantDescription: currentScholarship?.additionalgrantDescription || '',
       grant: currentScholarship?.grant || 0,
       categories: currentScholarship?.categories?.map((category) => ({ value: category })) || [{ value: '' }],
       content: currentScholarship?.content || '',
@@ -174,11 +167,32 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      console.info('Submitting data', data);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentScholarship ? 'מלגה נערכה בהצלחה!' : 'מלגה נוצרה בהצלחה');
-      // TODO send new scholarship to server
+      const accessToken = sessionStorage.getItem('accessToken');
+      const formattedCategories = data.categories.map(category => category.value);
+
+      const newScholarshipData = {
+        title:data.title,
+        description:data.description,
+        content:data.content,
+        categories:formattedCategories,
+        expiredDate:data.ExpirationDate,
+        grant: data.grant,
+        additional_grant_description:data.additionalgrantDescription
+      };
+      const headers = {
+        'Authorization': `Bearer ${accessToken}`,
+      };
+      console.info('Submitting data', newScholarshipData);
+      // await new Promise((resolve) => setTimeout(resolve, 500));
+      axios.post(endpoints.scholarship.new_scholarship, newScholarshipData, { headers })
+        .then(response => {
+          reset();
+          enqueueSnackbar(currentScholarship ? 'מלגה נערכה בהצלחה!' : 'מלגה נוצרה בהצלחה');
+          console.log('Scholarship created successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error creating scholarship:', error);
+        });
     } catch (error) {
       console.error('Submission error', error);
     }
@@ -212,7 +226,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
                 name="content"
                 control={control}
               />
-               {errors.content && (
+              {errors.content && (
                 <Typography color="error">{errors.content.message}</Typography>
               )}
             </Stack>
@@ -258,7 +272,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
                 variant="contained"
                 onClick={() => append({ value: '' })}
               >
-                Add Category
+                הוסף קטגוריה
               </Button>
             )}
           </Stack>
@@ -295,7 +309,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
                 startAdornment: (
                   <InputAdornment position="start">
                     <Box component="span" sx={{ color: 'text.disabled' }}>
-                    ₪
+                      ₪
                     </Box>
                   </InputAdornment>
                 ),
@@ -320,11 +334,11 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
           </Typography>
         </Grid>
       )}
-  
+
       <Grid xs={12} md={8}>
         <Card>
           {!mdUp && <CardHeader title="Expiration Date" />}
-  
+
           <Stack spacing={3} sx={{ p: 3 }}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
               <DatePicker

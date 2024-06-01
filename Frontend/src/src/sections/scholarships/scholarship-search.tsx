@@ -44,7 +44,7 @@ export default function JobSearch({ query, results, onSearch ,onResultClick }: P
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Search..."
+          placeholder="חפש..."
           InputProps={{
             ...params.InputProps,
             startAdornment: (

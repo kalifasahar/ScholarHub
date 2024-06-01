@@ -36,7 +36,9 @@ export const endpoints = {
     authenticate: '/api/users/authenticate'
   },
   scholarship: {
-    all: '/api/scholarship/get_all',
+    all: '/api/scholarships/get_all',
+    new_scholarship: '/api/scholarships/open_new',
+    get_scholarship: 'api/scholarships/get_scholarship'
   },
   post: {
     list: '/api/post/list',
