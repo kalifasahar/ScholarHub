@@ -126,18 +126,44 @@ export default function StudentListView() {
     setStudentApplications(filteredApplications);
   };
 
-const handleRankingChange = (id: string, rank: number) => {
+// const handleRankingChange = (id: string, rank: number) => {
+//   setStudentApplications((prev) => {
+//     const updated = prev.map((student) =>
+//       student.studentID === id ? { ...student, rank } : student
+//     );
+
+//     // Sort the updated list based on the new rankings
+//     const sorted = updated.sort((a, b) => a.rank - b.rank);
+
+//     return sorted;
+//   });
+// };
+
+const handleRankingChange = (id: string, ranking: number) => {
   setStudentApplications((prev) => {
     const updated = prev.map((student) =>
-      student.studentID === id ? { ...student, rank } : student
+      student.studentID === id ? { ...student, ranking } : student
     );
 
     // Sort the updated list based on the new rankings
-    const sorted = updated.sort((a, b) => a.rank - b.rank);
+    const sorted = updated.sort((a, b) => a.ranking - b.ranking);
+
+    return sorted;
+  });
+
+  // Sort the table data as well
+  setTableData((prev) => {
+    const updated = prev.map((student) =>
+      student.studentID === id ? { ...student, ranking } : student
+    );
+
+    // Sort the updated list based on the new rankings
+    const sorted = updated.sort((a, b) => a.ranking - b.ranking);
 
     return sorted;
   });
 };
+
 
 
   const handleSaveRankings = async () => {

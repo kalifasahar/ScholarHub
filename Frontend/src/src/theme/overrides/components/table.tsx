@@ -1,6 +1,9 @@
 import { Theme, alpha } from '@mui/material/styles';
 import { tableRowClasses } from '@mui/material/TableRow';
 import { tableCellClasses } from '@mui/material/TableCell';
+import { Pagination } from '@mui/material';
+import label from 'src/components/label';
+import { defaultProps } from '../default-props';
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +76,9 @@ export function table(theme: Theme) {
           height: 16,
           top: 'calc(50% - 8px)',
         },
+      },
+      defaultProps:{
+        labelRowsPerPage: 'סטודנטים בעמוד',
       },
     },
   };

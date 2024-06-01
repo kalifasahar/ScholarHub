@@ -23,7 +23,7 @@ export type IStudentItem = {
   gradesAvarage: string;
   numOfArticles: string;
   scholarshipName: string;
-  rank: number;
+  ranking: number;
   gender: string;
   yearOfBirth: string;
   supervisor: string;

@@ -27,7 +27,7 @@ type Props = {
   row: IStudentItem;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
-  onRankingChange: (id: string, rank: number) => void;
+  onRankingChange: (id: string, ranking: number) => void;
 };
 
 export default function UserTableRow({
@@ -38,7 +38,7 @@ export default function UserTableRow({
   onDeleteRow,
   onRankingChange,
 }: Props) {
-  const { rank, name, studentID, email,
+  const { ranking, name, studentID, email,
      phoneNumber, department, degree, status, gradesAvarage, numOfArticles,
       gender, yearOfBirth, supervisor, fieldOfResearch, topicOfReasearch, dateOfStartDgree,
        instituteOfBechlor, facultyOfBechlor, departmentOfBechlor, rankArticles } = row;
@@ -60,7 +60,7 @@ export default function UserTableRow({
         <TableCell>
           <TextField
             type="number"
-            value={rank || ''}
+            value={ranking || ''}
             onChange={handleRankingChange}
             inputProps={{ min: 0 }}
             sx={{
