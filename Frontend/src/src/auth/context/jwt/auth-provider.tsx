@@ -6,14 +6,6 @@ import { AuthContext } from './auth-context';
 import { setSession, isValidToken } from './utils';
 import { AuthUserType, ActionMapType, AuthStateType } from '../../types';
 
-// ----------------------------------------------------------------------
-/**
- * NOTE:
- * We only build demo at basic level.
- * Customer will need to do some extra handling yourself if you want to extend the logic and other features...
- */
-// ----------------------------------------------------------------------
-
 enum Types {
   INITIAL = 'INITIAL',
   LOGIN = 'LOGIN',
@@ -77,12 +69,6 @@ type Props = {
   children: React.ReactNode;
 };
 
-const fakeUser: AuthUserType = {
-  id: 'fake-id',
-  displayName: 'Fake User',
-  email: 'fakeuser@example.com',
-  role: 'student', 
-};
 
 export function AuthProvider({ children }: Props) {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -94,19 +80,20 @@ export function AuthProvider({ children }: Props) {
       if (accessToken && isValidToken(accessToken)) {
         setSession(accessToken);
 
-        // const res = await axios.get(endpoints.auth.me,
-        //   {
-        //     headers: {
-        //       'Authorization': `Bearer ${accessToken}`
-        //     }
-        // });
-        // console.log(res);
-        // const {username,email} = res.data;
-        // console.log(username)
-        // console.log(email)
-        // const { user } = res.data;
-        const  user  = fakeUser;
-
+        const res = await axios.get(endpoints.auth.me,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        console.log(res);
+        const {first_name,surname,email,id,role} = res.data.data;
+        const  user: AuthUserType  =  {
+          id,
+          displayName: `${first_name} ${surname}`,
+          email,
+          role
+        };
 
         dispatch({
           type: Types.INITIAL,
@@ -175,17 +162,16 @@ export function AuthProvider({ children }: Props) {
   // REGISTER
   const register = useCallback(
     async (email: string, password: string, firstName: string, lastName: string) => {
-      const username = firstName
-      const role = 'student'
+      const role = 'admin'
       const data = {
+        first_name:firstName,
+        surname:lastName,
         email,
         password,
-        username,
         role
       };
       console.log(endpoints.auth.register)
       const res = await axios.post(endpoints.auth.register, data);
-
       console.log(res)
 
       dispatch({

@@ -14,21 +14,11 @@ import ScholarshipItem from './scholarship-item';
 
 type Props = {
   jobs: IScholarshipItem[];
-  selectedJob: IScholarshipItem | null;
-  openWizard: boolean;
-  setOpenWizard: (open: boolean) => void;
   onOpenWizard: (job: IScholarshipItem) => void;
 };
 
-export default function JobList({ jobs, selectedJob, openWizard, setOpenWizard, onOpenWizard }: Props) {
+export default function JobList({ jobs, onOpenWizard }: Props) {
   const router = useRouter();
-
-  const handleView = useCallback(
-    (id: string) => {
-      router.push(paths.dashboard.scholarships.details(id));
-    },
-    [router]
-  );
 
   const handleEdit = useCallback(
     (id: string) => {
@@ -56,12 +46,8 @@ export default function JobList({ jobs, selectedJob, openWizard, setOpenWizard, 
           <ScholarshipItem
             key={job.id}
             job={job}
-            onView={() => handleView(job.id)}
             onEdit={() => handleEdit(job.id)}
             onDelete={() => handleDelete(job.id)}
-            selectedJob={selectedJob} 
-            openWizard={openWizard} 
-            setOpenWizard={setOpenWizard} 
             onOpenWizard={() => onOpenWizard(job)}
           />
         ))}

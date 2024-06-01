@@ -1,38 +1,68 @@
-import axios, {endpoints} from 'src/utils/axios';
-
+import parse from 'html-react-parser';
+import { Box,Step, Modal, Button, Stepper, StepLabel, Typography } from '@mui/material';
+import { fDate } from 'src/utils/format-time';
+import axios, { endpoints } from 'src/utils/axios';
 import orderBy from 'lodash/orderBy';
-import { useState, useCallback , useEffect} from 'react';
-
+import { useState, useEffect ,useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-
-
-
-import { _jobs, JOB_SORT_OPTIONS } from 'src/_mock';
-
-
+import { JOB_SORT_OPTIONS } from 'src/_mock';
 import { IScholarshipItem } from 'src/types/scholarship';
-import JobList from './scholarship-list';
 import JobSort from './scholarship-sort';
 import JobSearch from './scholarship-search';
+import JobList from './scholarship-list';
+
+
+
+interface ScholarshipData {
+  id: string;
+  title: string;
+  content: string;
+  categories: string[];
+  expiredDate: string;
+  grant: number;
+  additional_grant_description: string;
+  description: string;
+}
 
 // ----------------------------------------------------------------------
 
 export default function ScholarshipsListView() {
 
   const [sortBy, setSortBy] = useState('עדכני');
-  const [selectedJob, setSelectedJob] =  useState<IScholarshipItem | null>(null);
+  const [selectedJob, setSelectedJob] = useState<IScholarshipItem | null>(null);
   const [openWizard, setOpenWizard] = useState(false);
   const [jobs, setJobs] = useState<IScholarshipItem[]>([]);
+  const [activeStep, setActiveStep] = useState(0);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+  const steps = ['Step 1', 'Step 2', 'Step 3']; // Define the steps of the wizard
   const [search, setSearch] = useState<{ query: string; results: IScholarshipItem[] }>({
     query: '',
     results: [],
   });
 
   useEffect(() => {
-    axios.get(endpoints.scholarship.all)
+    const accessToken = sessionStorage.getItem('accessToken');
+    axios.get(endpoints.scholarship.all, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
       .then(response => {
-        setJobs(response.data);
+        const realData = response.data.data;
+
+        const transformedJobs: IScholarshipItem[] = realData.map((job: ScholarshipData, index: number) => ({
+          id: job.id,
+          title: job.title,
+          description: job.description,
+          categories: job.categories,
+          content: job.content,
+          ExpirationDate: job.expiredDate,
+          additionalgrantDescription: job.additional_grant_description,
+          grant: job.grant
+        }));
+
+        setJobs(transformedJobs);
       })
       .catch(error => {
         console.error('Error fetching jobs:', error);
@@ -40,27 +70,23 @@ export default function ScholarshipsListView() {
   }, []);
 
   const dataFiltered = applyFilter({
-    inputData: _jobs,
+    inputData: jobs,
     sortBy,
   });
 
-  useEffect(() => {
-    // remove this later
-    console.log('dataFiltered updated', dataFiltered);
-  }, [dataFiltered]);
-
   const handleOpenWizard = useCallback((id: string) => {
-    const selected = _jobs.find(job => job.id === id);
+    const selected = jobs.find(job => job.id === id);
     if (selected) {
       setSelectedJob(selected);
       setOpenWizard(true);
     }
-  }, []);
+  }, [jobs]);
+
   const handleOpenWizardFromButton = useCallback((job: IScholarshipItem) => {
     setSelectedJob(job);
     setOpenWizard(true);
   }, []);
-  
+
   const handleSortBy = useCallback((newValue: string) => {
     setSortBy(newValue);
   }, []);
@@ -73,8 +99,8 @@ export default function ScholarshipsListView() {
       }));
 
       if (inputValue) {
-        const results = _jobs.filter(
-          (job) => job.title.toLowerCase().indexOf(search.query.toLowerCase()) !== -1
+        const results = jobs.filter(
+          (job) => job.title.toLowerCase().indexOf(inputValue.toLowerCase()) !== -1
         );
 
         setSearch((prevState) => ({
@@ -83,9 +109,70 @@ export default function ScholarshipsListView() {
         }));
       }
     },
-    [search.query]
+    [jobs]
   );
 
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setOpenWizard(false);
+  };
+
+
+  const handleCloseWizard = () => {
+    setOpenWizard(false);
+  };
+
+  const renderWizardContent = (step: number) => {
+    if (fetchError) {
+      return <Typography color="error">{fetchError}</Typography>;
+    }
+    if (selectedJob) {
+      switch (step) {
+        case 0:
+          return (
+            <Box sx={{ maxHeight: '400px', px: 2 }}>
+              <Typography
+                variant="h4"
+                fontWeight="bold"
+                style={{
+                  fontSize: '2.5rem',
+                  margin: '20px 0',
+                  padding: '10px 0',
+                  borderBottom: '2px solid black',
+                }}
+              >
+                {selectedJob.title}
+              </Typography>
+              <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>
+                {parse(selectedJob.content)}
+              </Typography>
+              <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>
+                <span style={{ borderBottom: '2px solid black' }}>גובה מלגה: {selectedJob.grant} ₪</span>
+                <div>{selectedJob.additionalgrantDescription}</div>
+              </Typography>
+              <Typography variant="body2" >
+                <span style={{ borderBottom: '2px solid black' }}>תאריך אחרון להגשה: {fDate(selectedJob.ExpirationDate)}</span>
+              </Typography>
+            </Box>
+          );
+        case 1:
+          return <Typography>Content for Step 2</Typography>;
+        case 2:
+          return <Typography>Content for Step 3</Typography>;
+        default:
+          return 'Unknown step';
+      }
+    }
+    return <Typography>No data available</Typography>;
+  };
   const renderFilters = (
     <Stack
       spacing={3}
@@ -97,7 +184,7 @@ export default function ScholarshipsListView() {
         query={search.query}
         results={search.results}
         onSearch={handleSearch}
-        onResultClick={handleOpenWizard} // Add this line
+        onResultClick={handleOpenWizard}
       />
 
       <Stack direction="row" spacing={1} flexShrink={0}>
@@ -117,16 +204,59 @@ export default function ScholarshipsListView() {
         {renderFilters}
       </Stack>
 
+      <JobList
+        jobs={dataFiltered}
+        onOpenWizard={handleOpenWizardFromButton}
+      />
 
-      <JobList 
-        jobs={dataFiltered} 
-        selectedJob={selectedJob}
-        openWizard={openWizard} 
-        setOpenWizard={setOpenWizard} 
-        onOpenWizard={handleOpenWizardFromButton} 
-
-/>
+      <Modal open={openWizard} onClose={handleCloseWizard}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '900px',
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+            maxHeight: '80vh',
+            overflowY: 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Stepper activeStep={activeStep} sx={{ mb: 2 }}>
+            {steps.map((label, index) => (
+              <Step key={index}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <Box sx={{ flex: 1, my: 2, pb: 8, overflowY: 'auto' }}> {/* Added pb: 8 */}
+            {renderWizardContent(activeStep)}
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+              sx={{ mr: 1 }}
+            >
+              אחורה
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+            {activeStep === steps.length - 1 ? (
+              <Button onClick={handleReset}>הגש</Button>
+            ) : (
+              <Button onClick={handleNext}>הבא</Button>
+            )}
+          </Box>
+        </Box>
+      </Modal>
     </Container>
+
   );
 }
 
@@ -147,7 +277,6 @@ const applyFilter = ({
   if (sortBy === 'ישן') {
     inputData = orderBy(inputData, ['ExpirationDate'], ['asc']);
   }
-
 
   // Return the sorted data without any filtering
   return inputData;

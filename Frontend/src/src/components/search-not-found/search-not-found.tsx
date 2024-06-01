@@ -28,7 +28,7 @@ export default function SearchNotFound({ query, sx, ...other }: Props) {
     </Paper>
   ) : (
     <Typography variant="body2" sx={sx}>
-      Please enter keywords
+      הכנס מילות חיפוש
     </Typography>
   );
 }
