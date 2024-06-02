@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import TwoView from 'src/sections/my_scholarships/view';
+import MyScholarships from 'src/sections/my_scholarships/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function Page() {
         <title> Dashboard: Two</title>
       </Helmet>
 
-      <TwoView />
+      <MyScholarships />
     </>
   );
 }
