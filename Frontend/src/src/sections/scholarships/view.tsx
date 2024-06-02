@@ -11,8 +11,7 @@ import { IScholarshipItem } from 'src/types/scholarship';
 import JobSort from './scholarship-sort';
 import JobSearch from './scholarship-search';
 import JobList from './scholarship-list';
-
-
+import StudentSubmitForm from './student-submit-form';
 
 interface ScholarshipData {
   id: string;
@@ -35,7 +34,7 @@ export default function ScholarshipsListView() {
   const [jobs, setJobs] = useState<IScholarshipItem[]>([]);
   const [activeStep, setActiveStep] = useState(0);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const steps = ['Step 1', 'Step 2', 'Step 3']; // Define the steps of the wizard
+  const steps = ['Step 1', 'Step 2', 'Step 3']; 
   const [search, setSearch] = useState<{ query: string; results: IScholarshipItem[] }>({
     query: '',
     results: [],
@@ -113,7 +112,8 @@ export default function ScholarshipsListView() {
   );
 
   const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    
   };
 
   const handleBack = () => {
@@ -127,8 +127,23 @@ export default function ScholarshipsListView() {
 
 
   const handleCloseWizard = () => {
+    setActiveStep(0);
     setOpenWizard(false);
   };
+
+  const studentForm = ""
+
+  const getButtonProps = () => {
+    if (activeStep === steps.length - 1) {
+      return { text: 'סיים', action: handleReset };
+    }
+    if (activeStep === 0) {
+      return { text: 'להגשה', action: handleNext };
+    }
+    return { text: 'הבא', action: handleNext };
+  };
+  
+  const { text, action } = getButtonProps();
 
   const renderWizardContent = (step: number) => {
     if (fetchError) {
@@ -164,15 +179,17 @@ export default function ScholarshipsListView() {
             </Box>
           );
         case 1:
-          return <Typography>Content for Step 2</Typography>;
+          return <Typography>{selectedJob?.id === "1" ? <StudentSubmitForm /> : "כרגע לא נתמך במערכת נסו שוב מאוחר יותר"}</Typography>;
         case 2:
-          return <Typography>Content for Step 3</Typography>;
+          return <Typography>כרגע לא נתמך במערכת נסו שוב מאוחר יותר</Typography>;
         default:
           return 'Unknown step';
       }
     }
     return <Typography>No data available</Typography>;
   };
+
+
   const renderFilters = (
     <Stack
       spacing={3}
@@ -247,11 +264,7 @@ export default function ScholarshipsListView() {
               אחורה
             </Button>
             <Box sx={{ flex: '1 1 auto' }} />
-            {activeStep === steps.length - 1 ? (
-              <Button onClick={handleReset}>הגש</Button>
-            ) : (
-              <Button onClick={handleNext}>הבא</Button>
-            )}
+            <Button onClick={action}>{text}</Button>
           </Box>
         </Box>
       </Modal>

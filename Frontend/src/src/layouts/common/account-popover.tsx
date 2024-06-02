@@ -22,7 +22,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 const OPTIONS = [
   {
-    label: 'Home',
+    label: 'דף בית',
     linkTo: '/',
   },
   
@@ -109,7 +109,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
         >
-          Logout
+          התנתק
         </MenuItem>
       </CustomPopover>
     </>

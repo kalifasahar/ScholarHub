@@ -3,18 +3,33 @@ import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import { useState , useEffect} from 'react';
+import axios, { endpoints } from 'src/utils/axios';
 
-// import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
-export default function TwoView() {
-  // const settings = useSettingsContext();
+export default function MyScholarships() {
+  // const [selectedApplication, setSelectedApplication] = useState<IApplicationItem | null>(null);
+  // const [applications, setApplications] = useState<IApplicationItem[]>([]);
+
+  // useEffect(() => {
+  //   const accessToken = sessionStorage.getItem('accessToken');
+  //   axios.get(endpoints.applications.get_student_application, {headers: {'Authorization': `Bearer ${accessToken}`}})
+  //     .then(response => {
+  //       const data = response.data.data;
+  //       console.log(data)
+  //       setJobs(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching jobs:', error);
+  //     });
+  // }, []);
+
 
   return (
-    // <Container maxWidth={settings.themeStretch ? false : 'xl'}>
     <Container maxWidth='xl'>
-      <Typography variant="h4"> Page Two </Typography>
+      <Typography variant="h4"> המלגות שלי </Typography>
 
       <Box
         sx={{

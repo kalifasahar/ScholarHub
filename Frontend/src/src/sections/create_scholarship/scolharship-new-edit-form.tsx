@@ -97,7 +97,7 @@ const QuillEditor = ({ name, control }: QuillEditorProps) => (
 );
 
 type Props = {
-  currentScholarship?: IScholarshipItem;
+  currentScholarship?: IScholarshipItem | null;
 };
 
 export default function ProductNewEditForm({ currentScholarship }: Props) {
@@ -114,7 +114,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
     })).max(10, 'Can have up to 10 categories'),
     grant: Yup.number().moreThan(0, 'מענק צריך להיות גדול מ-0'),
     description: Yup.string().required('תיאור הוא חובה'),
-    additionalgrantDescription: Yup.string().required('Additional description is required'),
+    additionalgrantDescription: Yup.string(),
     content: Yup.string()
       .test('is-not-empty', 'יש למלא תוכן', (value) => {
         if (!value) return false;
@@ -183,8 +183,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
         'Authorization': `Bearer ${accessToken}`,
       };
       console.info('Submitting data', newScholarshipData);
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      axios.post(endpoints.scholarship.new_scholarship, newScholarshipData, { headers })
+      axios.post(currentScholarship ? endpoints.scholarship.edit_scholarship :endpoints.scholarship.new_scholarship, newScholarshipData, { headers })
         .then(response => {
           reset();
           enqueueSnackbar(currentScholarship ? 'מלגה נערכה בהצלחה!' : 'מלגה נוצרה בהצלחה');
@@ -361,14 +360,14 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
   const renderActions = (
     <>
       {mdUp && <Grid md={4} />}
-      <Grid xs={12} md={8} sx={{ display: 'flex', alignItems: 'center' }}>
+      <Grid container xs={12} md={8} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
           {!currentScholarship ? 'צור מלגה' : 'שמור שינויים'}
         </LoadingButton>
       </Grid>
     </>
   );
-
+  
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>

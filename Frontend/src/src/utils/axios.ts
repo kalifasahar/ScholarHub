@@ -38,7 +38,9 @@ export const endpoints = {
   scholarship: {
     all: '/api/scholarships/get_all',
     new_scholarship: '/api/scholarships/open_new',
-    get_scholarship: 'api/scholarships/get_scholarship'
+    get_scholarship: '/api/scholarships/get_scholarship',
+    edit_scholarship: '/api/scholarships/edit',
+    delete: 'api/scholarships/delete',
   },
   post: {
     list: '/api/post/list',

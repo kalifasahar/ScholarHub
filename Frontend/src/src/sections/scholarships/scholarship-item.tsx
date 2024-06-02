@@ -40,27 +40,6 @@ export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }:
   const { title, categories, ExpirationDate } = job;
 
 
-  // const fetchScholarshipData = async (scholarshipId: string) => {
-  //   setLoading(true);
-  //   setFetchError(null);
-  //   try {
-  //     const accessToken = sessionStorage.getItem('accessToken');
-  //     const headers = {
-  //       'Authorization': `Bearer ${accessToken}`,
-  //     };
-  //     const response = await axios.post(endpoints.scholarship.get_scholarship, { id: scholarshipId }, { headers });
-
-  //     console.log(response.data.data.content)
-  //     setScholarshipsData(response.data.data.content);
-  //   } catch (error) {
-  //     setFetchError(error.message);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
-
   return (
     <>
       <Card>
@@ -138,7 +117,7 @@ export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }:
           }}
         >
           <Iconify icon="solar:pen-bold" />
-          Edit
+          ערוך
         </MenuItem>
 
         <MenuItem
@@ -149,7 +128,7 @@ export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }:
           sx={{ color: 'error.main' }}
         >
           <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
+          מחק
         </MenuItem>
       </CustomPopover>
 
