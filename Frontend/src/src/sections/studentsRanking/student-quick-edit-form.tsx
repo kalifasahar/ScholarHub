@@ -21,11 +21,36 @@ import FormProvider, { RHFSelect, RHFTextField } from 'src/components/hook-form'
 import { IStudentItem } from 'src/types/student';
 
 // ----------------------------------------------------------------------
+type StudentApplication = {
+  id: number;
+  scholarship_id: number;
+  scholarshipName: string;
+  name: string;
+  email: string;
+  gender: string;
+  yearOfBirth: string;
+  supervisor: string;
+  fieldOfResearch: string;
+  topicOfReasearch: string;
+  dateOfStartDgree: string;
+  instituteOfBechlor: string;
+  facultyOfBechlor: string;
+  studentID: string;
+  phoneNumber: string;
+  department: string;
+  gradesAvarage: number;
+  degree: string;
+  numOfArticles: number;
+  ranking: number;
+  status: string;
+  departmentOfBechlor: string;
+  rankArticles: number;
+};
 
 type Props = {
   open: boolean;
   onClose: VoidFunction;
-  currentUser?: IStudentItem;
+  currentUser?: StudentApplication;
 };
 
 export default function UserQuickEditForm({ currentUser, open, onClose }: Props) {

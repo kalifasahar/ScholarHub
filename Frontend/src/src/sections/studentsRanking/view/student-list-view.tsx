@@ -39,13 +39,39 @@ import {
   TablePaginationCustom,
 } from 'src/components/table';
 
-import { IStudentItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/student';
+import { IUserTableFilters, IUserTableFilterValue } from 'src/types/student';
 
 import UserTableRow from '../student-table-row';
 import UserTableToolbar from '../student-table-toolbar';
 import UserTableFiltersResult from '../student-table-filters-result';
 
 // ----------------------------------------------------------------------
+
+type StudentApplication = {
+  id: number;
+  scholarship_id: number;
+  scholarshipName: string;
+  name: string;
+  email: string;
+  gender: string;
+  yearOfBirth: string;
+  supervisor: string;
+  fieldOfResearch: string;
+  topicOfReasearch: string;
+  dateOfStartDgree: string;
+  instituteOfBechlor: string;
+  facultyOfBechlor: string;
+  studentID: string;
+  phoneNumber: string;
+  department: string;
+  gradesAvarage: number;
+  degree: string;
+  numOfArticles: number;
+  ranking: number;
+  status: string;
+  departmentOfBechlor: string;
+  rankArticles: number;
+};
 
 const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
@@ -88,25 +114,65 @@ export default function StudentListView() {
   const router = useRouter();
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState<IStudentItem[]>(_userList);
-
+  const [tableData, setTableData] = useState<StudentApplication[]>([]);
   const [filters, setFilters] = useState<IUserTableFilters>(defaultFilters);
 
-  const [scholarships, setScholarships] = useState<{ id: string; name: string }[]>([]);
+  const [scholarships, setScholarships] = useState<{ id: string; title: string }[]>([]);
   const [selectedScholarship, setSelectedScholarship] = useState<string>('');
-  const [allStudentApplications, setAllStudentApplications] = useState<IStudentItem[]>([]);
-  const [studentApplications, setStudentApplications] = useState<IStudentItem[]>([]);
+  const [allStudentApplications, setAllStudentApplications] = useState<StudentApplication[]>([]);
+  const [studentApplications, setStudentApplications] = useState<StudentApplication[]>([]);
+
+
 
   // Fetch scholarships and all student applications on component mount
   useEffect(() => {
     async function fetchData() {
       try {
+        const accessToken = sessionStorage.getItem('accessToken');
+        const headers = {
+          'Authorization': `Bearer ${accessToken}`,
+        };
+        
         const [scholarshipResponse, applicationsResponse] = await Promise.all([
-          axios.get<{ id: string; name: string }[]>('/api/scholarships'),
-          axios.get<IStudentItem[]>('/api/student-applications')
+          axios.get('http://localhost:8000/api/scholarships/get_all', { headers }),
+          axios.get('http://localhost:8000/api/applications/get_all', { headers }),
         ]);
-        setScholarships(scholarshipResponse.data);
-        setAllStudentApplications(applicationsResponse.data);
+
+        if (scholarshipResponse.data.success) {
+          const scholarshipsData = scholarshipResponse.data.data.map((scholarship: any) => ({
+            id: scholarship.id,
+            title: scholarship.title,
+          }));
+          setScholarships(scholarshipsData);
+        }
+        if (applicationsResponse.data.success) {
+          const applicationsData = applicationsResponse.data.data.map((application: any) => ({
+            id: application.id, // int
+            scholarship_id: application.scholarship_id, // int
+            scholarshipName: application.name_of_scholarship, // string
+            name: application.student_name, // string
+            email: application.student_email, // string
+            gender: application.student_gender, // string
+            yearOfBirth: application.student_birthday, // string
+            supervisor: application.supervisor, // string
+            fieldOfResearch: application.field_of_reserch, // string
+            topicOfReasearch: application.topic_of_reserch, // string
+            dateOfStartDgree: application.date_of_start_degree, // string
+            instituteOfBechlor: application.institute_of_bachelor, // string
+            facultyOfBechlor: application.faculty_of_bachelor, // string
+            studentID: application.student_legal_id, // string
+            phoneNumber: application.student_phone, // string
+            department: application.student_department, // string
+            gradesAvarage: application.student_gpa, // number
+            degree: application.student_degree, // string
+            numOfArticles: application.student_num_of_articles, // int
+            ranking: application.rank, // int
+            status: application.status, // string
+            departmentOfBechlor: application.departmentOfBechlor, // string
+            rankArticles: application.rankArticles, // number
+          }));
+          setAllStudentApplications(applicationsData);
+        }
       } catch (error) {
         console.error('Failed to fetch data:', error);
       }
@@ -116,28 +182,17 @@ export default function StudentListView() {
   }, []);
 
   const handleScholarshipChange = (event: SelectChangeEvent<string>) => {
-    const scholarshipName = event.target.value as string;
+    const scholarshipName = event.target.value;
     setSelectedScholarship(scholarshipName);
     filterStudentApplications(scholarshipName);
   };
 
   const filterStudentApplications = (scholarshipName: string) => {
-    const filteredApplications = allStudentApplications.filter(application => application.scholarshipName === scholarshipName);
+    const filteredApplications = allStudentApplications.filter(
+      (application) => application.scholarshipName === scholarshipName
+    );
     setStudentApplications(filteredApplications);
   };
-
-// const handleRankingChange = (id: string, rank: number) => {
-//   setStudentApplications((prev) => {
-//     const updated = prev.map((student) =>
-//       student.studentID === id ? { ...student, rank } : student
-//     );
-
-//     // Sort the updated list based on the new rankings
-//     const sorted = updated.sort((a, b) => a.rank - b.rank);
-
-//     return sorted;
-//   });
-// };
 
 const handleRankingChange = (id: string, ranking: number) => {
   setStudentApplications((prev) => {
@@ -177,7 +232,7 @@ const handleRankingChange = (id: string, ranking: number) => {
   };
 
   const dataFiltered = applyFilter({
-    inputData: tableData, // tableData // studentApplications
+    inputData: studentApplications, // tableData // studentApplications
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -242,7 +297,7 @@ const handleRankingChange = (id: string, ranking: number) => {
   return (
     <>
       <Container maxWidth='lg'>
-        <FormControl fullWidth variant="outlined" sx={{ mb: 3 }} style={{ maxWidth: '300px', width: '100%' }}>
+        <FormControl fullWidth variant="outlined" sx={{ mb: 3 }} style={{ maxWidth: '600px', width: '100%' }}>
           <InputLabel id="scholarship-select-label">בחר מלגה</InputLabel>
           <Select
             labelId="scholarship-select-label"
@@ -251,8 +306,8 @@ const handleRankingChange = (id: string, ranking: number) => {
             label="בחר מלגה"
           >
             {scholarships.map((scholarship) => (
-              <MenuItem key={scholarship.id} value={scholarship.name}>
-                {scholarship.name}
+              <MenuItem key={scholarship.id} value={scholarship.title}>
+                {scholarship.title}
               </MenuItem>
             ))}
           </Select>
@@ -385,7 +440,7 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IStudentItem[];
+  inputData: StudentApplication[];
   comparator: (a: any, b: any) => number;
   filters: IUserTableFilters;
 }) {

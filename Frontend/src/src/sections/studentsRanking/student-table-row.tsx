@@ -15,16 +15,41 @@ import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
-import { IStudentItem } from 'src/types/student';
+// import { IStudentItem } from 'src/types/student';
 
 import UserQuickEditForm from './student-quick-edit-form';
 
 // ----------------------------------------------------------------------
+type StudentApplication = {
+  id: number;
+  scholarship_id: number;
+  scholarshipName: string;
+  name: string;
+  email: string;
+  gender: string;
+  yearOfBirth: string;
+  supervisor: string;
+  fieldOfResearch: string;
+  topicOfReasearch: string;
+  dateOfStartDgree: string;
+  instituteOfBechlor: string;
+  facultyOfBechlor: string;
+  studentID: string;
+  phoneNumber: string;
+  department: string;
+  gradesAvarage: number;
+  degree: string;
+  numOfArticles: number;
+  ranking: number;
+  status: string;
+  departmentOfBechlor: string;
+  rankArticles: number;
+};
 
 type Props = {
   selected: boolean;
   onEditRow: VoidFunction;
-  row: IStudentItem;
+  row: StudentApplication;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onRankingChange: (id: string, ranking: number) => void;
