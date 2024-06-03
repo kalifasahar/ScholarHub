@@ -168,34 +168,39 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const accessToken = sessionStorage.getItem('accessToken');
-      const formattedCategories = data.categories.map(category => category.value);
-
+  
+      // Map the form categories to an array of strings
+      const formattedCategories = data.categories.map((category) => category.value);
+  
       const newScholarshipData = {
-        title:data.title,
-        description:data.description,
-        content:data.content,
-        categories:formattedCategories,
-        expiredDate:data.ExpirationDate,
+        title: data.title,
+        description: data.description,
+        content: data.content,
+        categories: formattedCategories,
+        expiredDate: data.ExpirationDate,
         grant: data.grant,
-        additional_grant_description:data.additionalgrantDescription
+        additional_grant_description: data.additionalgrantDescription,
       };
+  
       const headers = {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       };
       console.info('Submitting data', newScholarshipData);
-      axios.post(currentScholarship ? endpoints.scholarship.edit_scholarship :endpoints.scholarship.new_scholarship, newScholarshipData, { headers })
-        .then(response => {
+      axios
+        .post(currentScholarship ? endpoints.scholarship.edit_scholarship :endpoints.scholarship.new_scholarship, newScholarshipData, { headers })
+        .then((response) => {
           reset();
           enqueueSnackbar(currentScholarship ? 'מלגה נערכה בהצלחה!' : 'מלגה נוצרה בהצלחה');
           console.log('Scholarship created successfully:', response.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error creating scholarship:', error);
         });
     } catch (error) {
       console.error('Submission error', error);
     }
   });
+  
 
   const renderDetails = (
     <>
