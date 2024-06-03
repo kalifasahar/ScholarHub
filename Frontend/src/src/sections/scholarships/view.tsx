@@ -6,7 +6,7 @@ import orderBy from 'lodash/orderBy';
 import { useState, useEffect ,useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import { JOB_SORT_OPTIONS } from 'src/_mock';
+// import { JOB_SORT_OPTIONS } from 'src/_mock';
 import { IScholarshipItem } from 'src/types/scholarship';
 import JobSort from './scholarship-sort';
 import JobSearch from './scholarship-search';
@@ -23,6 +23,11 @@ interface ScholarshipData {
   additional_grant_description: string;
   description: string;
 }
+
+const JOB_SORT_OPTIONS = [
+  { value: 'עדכני', label: 'עדכני' },
+  { value: 'ישן', label: 'ישן' },
+];
 
 // ----------------------------------------------------------------------
 

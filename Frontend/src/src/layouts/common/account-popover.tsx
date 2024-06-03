@@ -11,8 +11,6 @@ import Typography from '@mui/material/Typography';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
-
 import { useAuthContext } from 'src/auth/hooks';
 
 import { varHover } from 'src/components/animate';
