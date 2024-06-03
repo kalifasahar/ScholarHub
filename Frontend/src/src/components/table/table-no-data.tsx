@@ -15,10 +15,11 @@ export default function TableNoData({ notFound, sx }: Props) {
   return (
     <TableRow>
       {notFound ? (
-        <TableCell colSpan={12}>
+        <TableCell colSpan={20}>
           <EmptyContent
             filled
-            title="No Data"
+            title="אין מידע זמין"
+            imgUrl=""
             sx={{
               py: 10,
               ...sx,

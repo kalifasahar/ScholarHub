@@ -146,14 +146,21 @@ export default function StudentListView() {
           setScholarships(scholarshipsData);
         }
         if (applicationsResponse.data.success) {
-          const applicationsData = applicationsResponse.data.data.map((application: any) => ({
-            id: application.id, // int
+          const applicationsData = applicationsResponse.data.data.map((application: any) => {
+            // need to remove console
+            console.log(application.student_name);
+            console.log(application.departmentOfBechlor);
+            console.log(application.rankArticles);
+            console.log(application.student_birthday);
+            const yearOfBirth = new Date(application.student_birthday).getFullYear();
+            return {
+              id: application.id, // int
             scholarship_id: application.scholarship_id, // int
             scholarshipName: application.name_of_scholarship, // string
             name: application.student_name, // string
             email: application.student_email, // string
             gender: application.student_gender, // string
-            yearOfBirth: application.student_birthday, // string
+            yearOfBirth, // : application.student_birthday, // string
             supervisor: application.supervisor, // string
             fieldOfResearch: application.field_of_reserch, // string
             topicOfReasearch: application.topic_of_reserch, // string
@@ -168,9 +175,11 @@ export default function StudentListView() {
             numOfArticles: application.student_num_of_articles, // int
             ranking: application.rank, // int
             status: application.status, // string
-            departmentOfBechlor: application.departmentOfBechlor, // string
-            rankArticles: application.rankArticles, // number
-          }));
+            departmentOfBechlor: application.department_of_bechlor, // string
+            rankArticles: application.rank_articles, // number
+            };
+            
+          });
           setAllStudentApplications(applicationsData);
         }
       } catch (error) {
