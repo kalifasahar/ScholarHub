@@ -1,0 +1,6 @@
+{
+    "no_frontend_mode":true,
+    "clean_db_startup":true,
+    "use_preloaded_db":false,
+    "path_to_preloaded_db(not_affected_by--clean_db_startup)":"sqlite:///database_files_save/mock.db"
+}
