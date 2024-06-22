@@ -8,7 +8,7 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Create</title>
+        <title> Create</title>
       </Helmet>
 
       <FiveView />

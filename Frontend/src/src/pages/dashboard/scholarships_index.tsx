@@ -9,7 +9,7 @@ export default function Page() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Scholarships</title>
+        <title> Scholarships</title>
       </Helmet>
 
       <OneView />

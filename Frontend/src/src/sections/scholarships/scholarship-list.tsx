@@ -63,6 +63,24 @@ export default function JobList({ jobs: initialJobs, onOpenWizard }: Props) {
   );
 
   const handleFormClose = () => {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+    axios.get(endpoints.scholarship.all, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`
+      }
+    })
+      .then(response => {
+        const realData = response.data.data;
+      
+
+      setJobs(realData);
+    })
+    .catch(error => {
+      console.error('Error fetching jobs:', error);
+    });
     setIsModalOpen(false);
     setCurrentScholarship(null);
   };

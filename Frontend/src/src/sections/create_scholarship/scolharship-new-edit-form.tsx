@@ -34,6 +34,7 @@ import { IScholarshipItem } from 'src/types/scholarship';
 import axios, { endpoints } from 'src/utils/axios';
 
 type FormValues = {
+  id: string;
   title: string;
   categories: { value: string }[];
   grant: number;
@@ -127,6 +128,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
 
   const defaultValues = useMemo(
     () => ({
+      id: currentScholarship?.id || '',
       title: currentScholarship?.title || '',
       description: currentScholarship?.description || '',
       additionalgrantDescription: currentScholarship?.additionalgrantDescription || '',
@@ -173,6 +175,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
       const formattedCategories = data.categories.map((category) => category.value);
   
       const newScholarshipData = {
+        id:data.id,
         title: data.title,
         description: data.description,
         content: data.content,

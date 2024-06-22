@@ -42,15 +42,9 @@ export const endpoints = {
     edit_scholarship: '/api/scholarships/edit',
     delete: 'api/scholarships/delete',
   },
-  post: {
-    list: '/api/post/list',
-    details: '/api/post/details',
-    latest: '/api/post/latest',
-    search: '/api/post/search',
+  applications: {
+    get_all: '/api/applications/get_all',
+
   },
-  product: {
-    list: '/api/product/list',
-    details: '/api/product/details',
-    search: '/api/product/search',
-  },
+
 };

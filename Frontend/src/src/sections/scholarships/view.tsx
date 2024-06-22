@@ -1,4 +1,5 @@
 import parse from 'html-react-parser';
+import { form_data } from 'src/auth/types';
 import { Box,Step, Modal, Button, Stepper, StepLabel, Typography } from '@mui/material';
 import { fDate } from 'src/utils/format-time';
 import axios, { endpoints } from 'src/utils/axios';
@@ -29,6 +30,7 @@ const JOB_SORT_OPTIONS = [
   { value: 'ישן', label: 'ישן' },
 ];
 
+
 // ----------------------------------------------------------------------
 
 export default function ScholarshipsListView() {
@@ -43,6 +45,38 @@ export default function ScholarshipsListView() {
   const [search, setSearch] = useState<{ query: string; results: IScholarshipItem[] }>({
     query: '',
     results: [],
+  });
+  const [formData, setFormData] = useState<form_data>({
+    student_first_name_heb: '',
+    student_last_name_heb: '',
+    student_first_name_english: '',
+    student_last_name_english: '',
+    mentor_name: '',
+    israeli_id: '',
+    department: '',
+    is_israeli: false,
+    email: '',
+    gender: '',
+    birth_date: new Date(),
+    phone_number: '',
+    faculty: '',
+    resarch_field: '',
+    resarch_subject: '',
+    second_dgree_accpet_date: new Date(),
+    second_dgree_finsih_date: new Date(),
+    second_funding: '',
+    first_dgree_institution: '',
+    checklist: {
+      check_1: false,
+      check_2: false,
+      check_3: false,
+      check_4: false,
+      check_5: false,
+      check_6: false,
+      check_7: false,
+      check_8: false,
+    },
+    check_5_options: '', 
   });
 
   useEffect(() => {
@@ -136,7 +170,16 @@ export default function ScholarshipsListView() {
     setOpenWizard(false);
   };
 
-  const studentForm = ""
+  const handleFormChange = (newFormData: form_data) => {
+    setFormData(newFormData);
+  };
+
+  const handleSubmitFinal = () => {
+    // Add your final submission logic here
+    console.log('Final form submission data:', formData);
+    // Close the wizard or perform any other actions needed
+    handleReset();
+  };
 
   const getButtonProps = () => {
     if (activeStep === steps.length - 1) {
@@ -184,7 +227,7 @@ export default function ScholarshipsListView() {
             </Box>
           );
         case 1:
-          return <Typography>{selectedJob?.id === "1" ? <StudentSubmitForm /> : "כרגע לא נתמך במערכת נסו שוב מאוחר יותר"}</Typography>;
+          return <Typography>{selectedJob?.id === "1" ? <StudentSubmitForm formData={formData} onFormChange={handleFormChange} /> : "כרגע לא נתמך במערכת נסו שוב מאוחר יותר"}</Typography>;
         case 2:
           return <Typography>כרגע לא נתמך במערכת נסו שוב מאוחר יותר</Typography>;
         default:
