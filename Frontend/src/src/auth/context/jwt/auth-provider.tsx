@@ -1,3 +1,6 @@
+import { Permission, Role, roles } from 'src/auth/roles/roles';
+import { updatePath } from 'src/config-global';
+
 import { useMemo, useEffect, useReducer, useCallback } from 'react';
 
 import axios, { endpoints } from 'src/utils/axios';
@@ -104,6 +107,7 @@ export function AuthProvider({ children }: Props) {
             },
           },
         });
+        updatePath(user.role)
       } else {
         dispatch({
           type: Types.INITIAL,
@@ -157,6 +161,7 @@ export function AuthProvider({ children }: Props) {
         },
       },
     });
+  updatePath(user.role)
   }, []);
 
   // REGISTER
@@ -195,6 +200,15 @@ export function AuthProvider({ children }: Props) {
 
   const status = state.loading ? 'loading' : checkAuthenticated;
 
+  const hasPermission = useCallback(
+    (permission: Permission) => {
+      if (!state.user) return false;
+      const userRoles = roles[state.user.role as Role] || [];
+      return userRoles.includes(permission);
+    },
+    [state.user]
+  );
+
   const memoizedValue = useMemo(
     () => ({
       user: state.user,
@@ -206,8 +220,9 @@ export function AuthProvider({ children }: Props) {
       login,
       register,
       logout,
+      hasPermission,
     }),
-    [login, logout, register, state.user, status]
+    [login, logout, register, state.user, status, hasPermission]
   );
 
   return <AuthContext.Provider value={memoizedValue}>{children}</AuthContext.Provider>;

@@ -8,6 +8,7 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useAuthContext } from 'src/auth/hooks';
 
 type Props = {
   job: IScholarshipItem;
@@ -15,6 +16,8 @@ type Props = {
   onDelete: VoidFunction;
   onOpenWizard: () => void;
 };
+
+
 
 const CategoryList = ({ categories }: { categories: string[] }) => (
   <Stack direction="row" spacing={3} sx={{ p: 0 }}>
@@ -37,15 +40,18 @@ const CategoryList = ({ categories }: { categories: string[] }) => (
 
 export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }: Props) {
   const popover = usePopover();
+  const { hasPermission } = useAuthContext();
+  const admin_view = hasPermission('editSettings')
   const { title, categories, ExpirationDate } = job;
 
 
   return (
     <>
       <Card>
-        <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
+        {admin_view &&
+          <IconButton onClick={popover.onOpen} sx={{ position: 'absolute', top: 8, right: 8 }}>
           <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        </IconButton>}
 
         <Stack sx={{ p: 3, pb: 2 }}>
           <ListItemText
@@ -94,22 +100,25 @@ export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }:
             </Stack>
           ))}
         </Box>
-        <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />
+        {!admin_view &&
+        <Divider sx={{ width: '100%', borderStyle: 'dashed' }} />}
 
-        <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
+        {!admin_view &&
+          <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
           <Button variant="contained" color="primary" onClick={onOpenWizard}>
             פרטים נוספים
           </Button>
-        </Box>
+        </Box>}
+          
       </Card>
-
+      
+      {admin_view &&
       <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
         sx={{ width: 140 }}
       >
-
         <MenuItem
           onClick={() => {
             popover.onClose();
@@ -131,6 +140,7 @@ export default function ScholarshipItem({ job, onEdit, onDelete, onOpenWizard }:
           מחק
         </MenuItem>
       </CustomPopover>
+      }
 
 
 

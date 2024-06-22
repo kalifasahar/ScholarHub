@@ -24,12 +24,10 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/job/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/job/${id}/edit`
     },
-    two: `${ROOTS.DASHBOARD}/two`,
-    three: `${ROOTS.DASHBOARD}/three`,
+    myScholraships: `${ROOTS.DASHBOARD}/applications`,
     group: {
       root: `${ROOTS.DASHBOARD}/group`,
-      five: `${ROOTS.DASHBOARD}/group/five`,
-      six: `${ROOTS.DASHBOARD}/group/six`,
+      five: `${ROOTS.DASHBOARD}/group/create`,
     },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
