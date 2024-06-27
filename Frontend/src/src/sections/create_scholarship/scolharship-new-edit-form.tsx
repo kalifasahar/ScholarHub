@@ -3,6 +3,7 @@ import { useForm, useFieldArray, Resolver, Controller, Control } from 'react-hoo
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
+import { useDropzone } from 'react-dropzone';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -42,6 +43,8 @@ type FormValues = {
   additionalgrantDescription: string;
   content: string;
   ExpirationDate: Date;
+  files: File[];
+  fileExplanation: string; 
 };
 
 type QuillEditorProps = {
@@ -123,7 +126,9 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
         return strippedContent.length > 0;
       })
       .required('יש למלא תוכן'),
-    ExpirationDate: Yup.date().required('יש לציין תאריך סיום')
+    ExpirationDate: Yup.date().required('יש לציין תאריך סיום'),
+    fileExplanation: Yup.string(), 
+
   });
 
   const defaultValues = useMemo(
@@ -135,7 +140,9 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
       grant: currentScholarship?.grant || 0,
       categories: currentScholarship?.categories?.map((category) => ({ value: category })) || [{ value: '' }],
       content: currentScholarship?.content || '',
-      ExpirationDate: currentScholarship?.ExpirationDate ? new Date(currentScholarship?.ExpirationDate) : new Date()
+      ExpirationDate: currentScholarship?.ExpirationDate ? new Date(currentScholarship?.ExpirationDate) : new Date(),
+      files: [],
+      fileExplanation: '', 
     }),
     [currentScholarship]
   );
@@ -365,6 +372,85 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
     </>
   );
 
+  const renderFiles = (
+    <>
+      {mdUp && (
+        <Grid md={4}>
+          <Typography variant="h6" sx={{ mb: 0.5 }}>
+            הרכב תיק מועמד
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            קבצים שיש למלא והסבר על יצרית תיק מועמד
+          </Typography>
+        </Grid>
+      )}
+  
+      <Grid xs={12} md={8}>
+        <Card>
+          {!mdUp && <CardHeader title="File Uploads" />}
+  
+          <Stack spacing={3} sx={{ p: 3 }}>
+            <Controller
+              name="files"
+              control={control}
+              render={({ field }) => {
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const { getRootProps, getInputProps } = useDropzone({
+                  onDrop: (acceptedFiles: File[]) => {
+                    field.onChange([...field.value, ...acceptedFiles]);
+                  },
+                  multiple: true,
+                });
+  
+                return (
+                  <>
+                    <div
+                      {...getRootProps()}
+                      style={{
+                        border: '2px dashed #cccccc',
+                        padding: '20px',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <input {...getInputProps()} />
+                      <p>גרור ושחרר את כל הקבצים הרלוונטים כאן, או לחץ כדי לבחור קבצים</p>
+                    </div>
+                    <Stack spacing={1}>
+                      {field.value && field.value.map((file, index) => (
+                        <Box key={index} display="flex" alignItems="center">
+                          <Typography variant="body2" sx={{ flexGrow: 1 }}>
+                            {file.name}
+                          </Typography>
+                          <IconButton onClick={() => {
+                            const newFiles = [...field.value];
+                            newFiles.splice(index, 1);
+                            field.onChange(newFiles);
+                          }}>
+                            <DeleteIcon />
+                          </IconButton>
+                        </Box>
+                      ))}
+                    </Stack>
+                  </>
+                );
+              }}
+            />
+            {errors.files && (
+              <Typography color="error">{errors.files.message}</Typography>
+            )}
+  
+            {/* Explanation headline */}
+            <Stack spacing={1.5}>
+              <Typography variant="subtitle2">הסבר על תהליך מילוי הקבצים:</Typography>
+              <RHFTextField name="fileExplanation" label="תיאור" multiline rows={4} />
+            </Stack>
+          </Stack>
+        </Card>
+      </Grid>
+    </>
+  );  
+    
   const renderActions = (
     <>
       {mdUp && <Grid md={4} />}
@@ -383,6 +469,7 @@ export default function ProductNewEditForm({ currentScholarship }: Props) {
         {renderPricing}
         {renderExpirationDate}
         {renderCategories}
+        {renderFiles}
         {renderActions}
       </Grid>
     </FormProvider>
