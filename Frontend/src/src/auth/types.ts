@@ -85,15 +85,4 @@ export interface form_data {
   second_dgree_finsih_date: Date;
   second_funding: string;
   first_dgree_institution: string;
-  checklist: {
-    check_1: boolean;
-    check_2: boolean;
-    check_3: boolean;
-    check_4: boolean;
-    check_5: boolean;
-    check_6: boolean;
-    check_7: boolean;
-    check_8: boolean;
-  };
-  check_5_options: string;
 }

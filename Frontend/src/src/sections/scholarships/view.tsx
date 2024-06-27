@@ -66,17 +66,6 @@ export default function ScholarshipsListView() {
     second_dgree_finsih_date: new Date(),
     second_funding: '',
     first_dgree_institution: '',
-    checklist: {
-      check_1: false,
-      check_2: false,
-      check_3: false,
-      check_4: false,
-      check_5: false,
-      check_6: false,
-      check_7: false,
-      check_8: false,
-    },
-    check_5_options: '', 
   });
 
   useEffect(() => {
@@ -224,6 +213,29 @@ export default function ScholarshipsListView() {
               <Typography variant="body2" >
                 <span style={{ borderBottom: '2px solid black' }}>תאריך אחרון להגשה: {fDate(selectedJob.ExpirationDate)}</span>
               </Typography>
+
+
+              <Box sx={{ mt: 4 }}>
+        <Typography
+          variant="h5" >
+          הרכב תיק מועמד
+        </Typography>
+        <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>
+          will be expliantion here
+          {/* {bla.explanation} */}
+        </Typography>
+        <Typography variant="body1" gutterBottom sx={{ whiteSpace: 'pre-wrap' }}>
+          {/* {bla.files.map((file, index) => (
+            <div key={index}>
+              <a href={file.url} target="_blank" rel="noopener noreferrer">
+                {file.name}
+              </a>
+            </div>
+          ))} */}
+        </Typography>
+      </Box>
+
+
             </Box>
           );
         case 1:
@@ -281,12 +293,13 @@ export default function ScholarshipsListView() {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '90%',
-            maxWidth: '900px',
+            width: '95%',
+            maxWidth: '95%',
+            height: '95%', 
+            maxHeight: '95%', 
             bgcolor: 'background.paper',
             boxShadow: 24,
             p: 4,
-            maxHeight: '80vh',
             overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column',
