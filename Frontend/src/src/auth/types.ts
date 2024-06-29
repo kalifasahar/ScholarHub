@@ -31,12 +31,9 @@ type CanRemove = {
     email: string,
     password: string,
     firstName: string,
-    lastName: string
+    lastName: string,
+    isStaff: boolean
   ) => Promise<void>;
-  //
-  loginWithGoogle?: () => Promise<void>;
-  loginWithGithub?: () => Promise<void>;
-  loginWithTwitter?: () => Promise<void>;
   //
   loginWithPopup?: (options?: PopupLoginOptions) => Promise<void>;
   loginWithRedirect?: (options?: RedirectLoginOptions) => Promise<void>;
@@ -55,7 +52,7 @@ export type JWTContextType = CanRemove & {
   authenticated: boolean;
   unauthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  register: (email: string, password: string, firstName: string, lastName: string, isStaff:boolean) => Promise<void>;
   logout: () => Promise<void>;
   hasPermission: (permission: Permission) => boolean;
 };

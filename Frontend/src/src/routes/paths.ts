@@ -18,6 +18,7 @@ export const paths = {
   // DASHBOARD
   dashboard: {
     root: ROOTS.DASHBOARD,
+    studentsApplications: `${ROOTS.DASHBOARD}/studentsApplications`,
     scholarships: {
       root: `${ROOTS.DASHBOARD}/job`,
       new: `${ROOTS.DASHBOARD}/job/new`,

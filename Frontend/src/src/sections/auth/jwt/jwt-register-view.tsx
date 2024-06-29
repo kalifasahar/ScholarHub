@@ -12,6 +12,8 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
@@ -47,6 +49,7 @@ export default function JwtRegisterView() {
     lastName: Yup.string().required('נדרש למלא שם משפחה'),
     email: Yup.string().required('נדרש למלא דואר אלקטרוני').email('כתובת הדואר האלקטרונית חייבת להיות תקינה'),
     password: Yup.string().required('נדרש למלא סיסמא'),
+    isStaff: Yup.boolean().default(false),
   });
 
   const defaultValues = {
@@ -54,6 +57,7 @@ export default function JwtRegisterView() {
     lastName: '',
     email: '',
     password: '',
+    isStaff: false,
   };
 
   const methods = useForm({
@@ -70,7 +74,7 @@ export default function JwtRegisterView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       // user's registration data is submitted to the authentication service
-      await register?.(data.email, data.password, data.firstName, data.lastName);
+      await register?.(data.email, data.password, data.firstName, data.lastName, data.isStaff);
       
       // Set success message
       setSuccessMsg('הודעת אימות נשלחה בהצלחה לדואר האלקטרוני, אנא לחץ על הקישור על מנת לסיים את תהליך ההרשמה בהצלחה');
@@ -123,6 +127,11 @@ export default function JwtRegisterView() {
             </InputAdornment>
           ),
         }}
+      />
+
+      <FormControlLabel
+        control={<Checkbox name="isStaff" />}
+        label="חבר סגל"
       />
 
       <LoadingButton

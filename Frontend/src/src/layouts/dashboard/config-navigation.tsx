@@ -25,6 +25,7 @@ export function useNavData() {
         items: [
           hasPermission('Scholarships') && { title: 'מלגות', path: paths.dashboard.root, icon: ICONS.dashboard },
           hasPermission('MyScholarships') && { title: 'הבקשות שלי', path: paths.dashboard.myScholraships, icon: ICONS.ecommerce },
+          hasPermission('Scholarships') && { title: 'בקשות סטודנטים', path: paths.dashboard.studentsApplications, icon: ICONS.ecommerce }, // todo: changes permission
         ].filter(Boolean) as NavItemBaseProps[], // Filter out null values and assert type
       },
 
