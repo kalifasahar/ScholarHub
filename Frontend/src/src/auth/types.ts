@@ -65,24 +65,31 @@ export type CustomRouteObject = RouteObject & {
   children?: CustomRouteObject[];
 };
 
-export interface form_data {
-  student_first_name_heb: string;
-  student_last_name_heb: string;
-  student_first_name_english: string;
-  student_last_name_english: string;
-  mentor_name: string;
-  israeli_id: string;
-  department: string;
-  is_israeli: boolean;
-  email: string;
-  gender: string;
-  birth_date: Date;
-  phone_number: string;
-  faculty: string;
-  resarch_field: string;
-  resarch_subject: string;
-  second_dgree_accpet_date: Date;
-  second_dgree_finsih_date: Date;
-  second_funding: string;
-  first_dgree_institution: string;
+export interface wizard_data {
+  hebFirstName : string;
+  hebLastName : string;
+  engFirstName : string;
+  engLastName : string;
+  supervisor : string;
+  studentID : string;
+  department : string;
+  email : string;
+  gender : string;
+  yearOfBirth : Date;
+  phoneNumber : string;
+  faculty : string;
+  fieldOfResearch : string;
+  topicOfResearch : string;
+  dateOfStartDgree : Date;
+  dateOfFinishDgree : Date;
+  fundsResources : string;
+  instituteOfBechlor : string;
+  gradesAvarageOfBechlor : string;
+  isFinalGrade: boolean;
+  rankingOfBechlor: string;
+  dateOfFinishBechlor : Date;
+  departmentOfBechlor : string;
+  facultyOfBechlor : string;
+  secondScholarship: string;
+  studentNotes: string
 }
